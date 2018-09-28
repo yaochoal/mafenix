@@ -12,7 +12,7 @@
 #
 
 class ResourceSerializer < ActiveModel::Serializer
-  attributes :id ,:name ,:link ,:created_at, :description, :resource
+  attributes :id ,:name ,:link ,:created_at, :description
   has_many :course_has_resources
   has_many :teacher_has_resources
 

@@ -12,6 +12,7 @@
 #
 
 class Resource < ApplicationRecord
+    has_one_attached :file
     #asociacion de profesores a recurso
     has_many :teacher_has_resources
     has_many :teachers, through: :teacher_has_resources
