@@ -1,11 +1,9 @@
 version: '3'
 
 services:
-  django_db:
+  comments-db:
     image: postgres
-    volumes:
-      - ./tmp/db:/var/lib/postgresql/data
-  django_web:
+  comments-ms:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
@@ -13,4 +11,4 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - django_db
+      - comments-db

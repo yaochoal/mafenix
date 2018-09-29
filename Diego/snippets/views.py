@@ -4,6 +4,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
+import json
+
 @csrf_exempt
 def snippet_list(request):
     """
@@ -46,3 +48,19 @@ def snippet_detail(request, pk):
     elif request.method == 'DELETE':
         snippet.delete()
         return HttpResponse(status=204)
+@csrf_exempt
+def snippet_query(request):
+    
+    if request.method == 'GET':
+        snippets = Snippet.objects.filter(service="resources",service_id=1)
+        serializer = SnippetSerializer(snippets, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False)
+
+    
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        snippets = Snippet.objects.filter(service=data["service"],service_id=data["service_id"])
+        serializer = SnippetSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
