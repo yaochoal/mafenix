@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: rails_db
+  host: resources-db
   username: postgres
   password:
   pool: 5
