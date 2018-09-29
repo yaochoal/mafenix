@@ -3,7 +3,7 @@ package dao
 import (
 	"log"
 
-	. "github.com/mlabouardy/users-restapi/models"
+	. "github.com/yaochoal/users-restapi/models"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -39,6 +39,16 @@ func (m *UsersDAO) FindAll() ([]User, error) {
 func (m *UsersDAO) FindById(id string) (User, error) {
 	var user User
 	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&user)
+
+	return user, err
+}
+
+// Find a user by its id
+func (m *UsersDAO) FindByEmail(email string) (User, error) {
+	var user User
+	//log.Println("buscar= " + email)
+	err := db.C(COLLECTION).Find(bson.M{"email": email}).One(&user)
+	//log.Println(user.Email)
 	return user, err
 }
 

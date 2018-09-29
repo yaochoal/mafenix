@@ -1,15 +1,16 @@
 version: "3"
 services:
-  app-back:
-    image: itwars/mygo
+  users-ms:
+    build: ./users-restapi
     networks:
       - mongo-go
       - nginx-go
     ports: 
       - 3000:3000
     depends_on:
-      - mongodb
-  nginx:
+      - users-db
+    
+  users-nginx:
     image: itwars/nginx-http2
     volumes: 
             - /home/vrh/docker/myrepo/stack-mongo-golang-vuejs-nginx/nginx-http2/conf/:/etc/nginx/conf.d/
@@ -19,9 +20,9 @@ services:
     networks: 
             - nginx-go
     depends_on:
-      - app-back
+      - users-ms
    
-  mongodb:
+  users-db:
     image: itwars/mongodb
     volumes:
             - mongodb-data:/data/db
@@ -30,7 +31,7 @@ services:
     ports:
             - 27017:27017
             - 28017:28017
-  
+    
 networks:
   mongo-go:
   nginx-go:
