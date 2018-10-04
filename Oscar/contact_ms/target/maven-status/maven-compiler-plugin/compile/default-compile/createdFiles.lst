@@ -1,0 +1,4 @@
+sa/contact/model/Contact.class
+sa/contact/service/ContactService.class
+sa/contact/resource/ContactResource.class
+sa/contact/JAXRSConfiguration.class
