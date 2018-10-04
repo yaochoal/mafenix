@@ -11,8 +11,8 @@ type User struct {
 	Password string        `bson:"password" json:"password"`
 }
 
-
-func (c Customer) Validate() error {
+/*
+func (c User) Validate() error {
 	return validation.ValidateStruct(&c,
 		// Name cannot be empty, and the length must be between 5 and 20.
 		validation.Field(&c.Ṕassword, validation.Required, validation.Length(5, 20)),
@@ -23,3 +23,4 @@ func (c Customer) Validate() error {
 		// Validate Address using its own validation rules
 	)
 }
+*/
