@@ -2,187 +2,199 @@
 
 swagger: '2.0'
 info:
-	version: 1.0.0
-	title: Microservice for Contact
-	description: Java + MySQL
-	license:
-		name: Mafenix
+  version: 1.0.0
+  title: Microservice for Contacts
+  description: Java + MySQL
+  license:
+    name: Mafenix
 host: 192.168.99.101:6000
 basePath: /contacts-ms/resources
 schemes:
-	- http
+  - http
 consumes:
-	- application/json
+  - application/json
 produces:
-	- application/json
+  - application/json
 paths:
-	/contacts:
-		post:
-			summary: Creates a new contact
-			operationId: createContact
-			parameters:
-				- name: contact
-					in: body
-					required: true
-					description: Contact Object
-					schema:
-						$ref: '#/definitions/ContactInput'
-			responses:
-				'201':
-					description: Created
-				'400':
-					description: Bad Request
-					schema:
-						$ref: '#/definitions/ErrorModel'
-				'500':
-					description: Internal Server Error
-					schema:
-						$ref: '#/definitions/ErrorModel'
-		get:
-			summary: Returns all contacts
-			operationId: getAllContacts
-			responses:
-				'200':
-					description: Ok
-					schema:
-						$ref: '#/definitions/CoursesList'
-				'406':
-					description: Not Acceptable (Invalid Params)
-					schema:
-						$ref: '#/definitions/ErrorModel'
-				'500':
-					description: Internal Server Error
-					schema:
-						$ref: '#/definitions/ErrorModel'
+  /contacts:
+    post:
+      summary: Creates a new contact
+      operationId: createContacts
+      parameters:
+        - name: contact
+          in: body
+          required: true
+          description: Contact Object
+          schema:
+            $ref: '#/definitions/ContactInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all contacts
+      operationId: getAllContacts
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/ContactsList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
 
-	/contacts/{id}:
-		get:
-			summary: Returns a contact with the given id
-			operationId: getContactById
-			parameters:
-				- name: id
-					in: path
-					description: The id of the contact to be returned
-					required: true
-					type: integer
-			responses:
-				'200':
-					description: Ok
-					schema:
-						$ref: '#/definitions/Contact'
-				'404':
-					description: Not Found
-					schema:
-						$ref: '#/definitions/ErrorModel'
-				'406':
-						description: Not Acceptable (Invalid Params)
-						schema:
-							$ref: '#/definitions/ErrorModel'
-				'500':
-					description: unexpected error
-					schema:
-						$ref: '#/definitions/ErrorModel'
+  /courses/{id}:
+    get:
+      summary: Returns a contact with the given id
+      operationId: getContactByCode
+      parameters:
+        - name: id
+          in: path
+          description: The id of the contact to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Contact'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
 
-		put:
-			summary: Updates a contact with the given id
-			operationId: updateCourse
-			parameters:
-				- name: id
-					in: path
-					description: The id of the contact to be updated
-					required: true
-					type: integer
-				- name: contact
-					in: body
-					required: true
-					description: Contact Object
-					schema:
-						$ref: '#/definitions/ContactInput'
-			responses:
-				'204':
-					description: No Content
-				'404':
-					description: Not Found
-					schema:
-						$ref: '#/definitions/ErrorModel'
-				'406':
-						description: Not Acceptable (Invalid Params)
-						schema:
-							$ref: '#/definitions/ErrorModel'
-				'500':
-					description: unexpected error
-					schema:
-						$ref: '#/definitions/ErrorModel'
+    put:
+      summary: Updates a contact with the given id
+      operationId: updateContact
+      parameters:
+        - name: id
+          in: path
+          description: The id of the contact to be updated
+          required: true
+          type: integer
+        - name: contact
+          in: body
+          required: true
+          description: Course Object
+          schema:
+            $ref: '#/definitions/ContactInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
 
-		delete:
-			summary: Deletes a contact with the given id
-			operationId: deleteCourse
-			parameters:
-				- name: id
-					in: path
-					description: The id of the contact to be deleted
-					required: true
-					type: integer
-			responses:
-				'200':
-					description: Ok
-				'404':
-					description: Not Found
-					schema:
-						$ref: '#/definitions/ErrorModel'
-				'406':
-						description: Not Acceptable (Invalid Params)
-						schema:
-							$ref: '#/definitions/ErrorModel'
-				'500':
-					description: unexpected error
-					schema:
-						$ref: '#/definitions/ErrorModel'
+    delete:
+      summary: Deletes a contact with the given id
+      operationId: deleteContact
+      parameters:
+        - name: id
+          in: path
+          description: The id of the course to be deleted
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
 
 definitions:
 
-	# Courses
-	Contact:
-		type: object
-		properties:
-			id:
-				type: integer
-			name:
-				type: string
-			credits:
-				type: integer
+  # Contacts
+  Contact:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      subject:
+        type: string
+      message:
+        type: string
 
-	ContactInput:
-		type: object
-		properties:
-			name:
-				type: string
-			credits:
-				type: integer
+  ContactInput:
+    type: object
+    properties:
+      name:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      subject:
+        type: string
+      message:
+        type: string
 
-	CoursesList:
-		type: object
-		required:
-			- total
-			- list
-		properties:
-			total:
-				type: number
-			list:
-				type: array
-				items:
-					$ref: '#/definitions/Contact'
+  ContactsList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
 
 # Errors
-	ErrorModel:
-		type: object
-		required:
-			- message
-			- id
-		properties:
-			message:
-				type: string
-			id:
-				type: number
-			description:
-				type: object
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - id
+    properties:
+      message:
+        type: string
+      id:
+        type: number
+      description:
+        type: object
