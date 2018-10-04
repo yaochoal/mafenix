@@ -6,7 +6,7 @@ var express = require('express'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://mongo/dummy-app');
+mongoose.connect('mongodb://scoreresources-db/dummy-app');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));

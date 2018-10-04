@@ -29,7 +29,6 @@ services:
     networks:
       - mongo-go
     ports:
-            - 27017:27017
             - 28017:28017
     
 networks:
