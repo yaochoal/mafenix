@@ -16,7 +16,7 @@
   </GlobalNamingResources>
   <Service name="Catalina">
     <!-- Change deployment port here -->
-    <Connector port="3000" protocol="HTTP/1.1"
+    <Connector port="6000" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" xpoweredBy="false" server="Apache TomEE" />
     <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />

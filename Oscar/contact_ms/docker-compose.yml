@@ -3,12 +3,12 @@ services:
   contacts-ms:
     build: .
     ports:
-      - "3000:3000"
+      - "6000:6000"
     depends_on:
       contacts-db:
         condition: service_healthy
     healthcheck:
-      test: "curl -I contacts-ms:3000/contacts-ms/resources/contacts/ --fail"
+      test: "curl -I contacts-ms:6000/contacts-ms/resources/contact/ --fail"
       interval: 20s
       retries: 10
 
