@@ -1,0 +1,188 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for Contact
+  description: Java + MySQL
+  license:
+    name: Mafenix
+host: 192.168.99.101:3000
+basePath: /contacts-ms/resources
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /contacts:
+    post:
+      summary: Creates a new contact
+      operationId: createCourse
+      parameters:
+        - name: contact
+          in: body
+          required: true
+          description: Contact Object
+          schema:
+            $ref: '#/definitions/CourseInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all contacts
+      operationId: getAllCourses
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/CoursesList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /contacts/{code}:
+    get:
+      summary: Returns a contact with the given code
+      operationId: getCourseByCode
+      parameters:
+        - name: code
+          in: path
+          description: The code of the contact to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Contact'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Updates a contact with the given code
+      operationId: updateCourse
+      parameters:
+        - name: code
+          in: path
+          description: The code of the contact to be updated
+          required: true
+          type: integer
+        - name: contact
+          in: body
+          required: true
+          description: Contact Object
+          schema:
+            $ref: '#/definitions/CourseInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a contact with the given code
+      operationId: deleteCourse
+      parameters:
+        - name: code
+          in: path
+          description: The code of the contact to be deleted
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # Courses
+  Contact:
+    type: object
+    properties:
+      code:
+        type: integer
+      name:
+        type: string
+      credits:
+        type: integer
+
+  CourseInput:
+    type: object
+    properties:
+      name:
+        type: string
+      credits:
+        type: integer
+
+  CoursesList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object
