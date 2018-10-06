@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: resources
+#
+#  id          :integer          not null, primary key
+#  name        :string
+#  link        :string
+#  description :string
+#  resource    :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  link: MyString
+  description: MyString
+  resource: MyString
+
+two:
+  name: MyString
+  link: MyString
+  description: MyString
+  resource: MyString

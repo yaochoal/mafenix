@@ -1,0 +1,189 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for ScoreResources
+  description: Nodejs + MongoDB
+  license:
+    name: Software Architecture 2018-II
+host: 192.168.99.101:5000
+basePath: /scoreservice
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /scoreservice:
+    post:
+      summary: Save scores
+      operationId: createScore
+      parameters:
+        - name: id
+          in: body
+          required: true
+          description: Score Object
+          schema:
+            $ref: '#/definitions/ScoreInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all scores
+      operationId: getScores
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/ScoresList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /scoreservice/{id}:
+    get:
+      summary: Returns a course with the given code
+      operationId: getByCode
+      parameters:
+        - name: id
+          in: path
+          description: The code of the course to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Scores'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Updates a course with the given code
+      operationId: updateCourse
+      parameters:
+        - name: id
+          in: path
+          description: The code of the course to be updated
+          required: true
+          type: integer
+        - name: course
+          in: body
+          required: true
+          description: Course Object
+          schema:
+            $ref: '#/definitions/ScoreInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a course with the given code
+      operationId: deleteCourse
+      parameters:
+        - name: id
+          in: path
+          description: The code of the course to be deleted
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: Not Acceptable (Invalid Params)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # Scores
+  Scores:
+    type: object
+    properties:
+      service:
+        type: string
+      service_id:
+        type: integer
+      score:
+        type: integer
+      user_id:
+        type: integer
+
+  ScoreInput:
+    type: object
+    properties:
+      name:
+        type: string
+      credits:
+        type: integer
+
+  ScoresList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Scores'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+      id:
+        type: number
+      description:
+        type: object
