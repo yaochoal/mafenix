@@ -3,11 +3,11 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: Microservice for Contact
+  title: Microservice for Contacts
   description: Java + MySQL
   license:
     name: Mafenix
-host: 192.168.99.101:3000
+host: 192.168.99.101:6000
 basePath: /contacts-ms/resources
 schemes:
   - http
@@ -19,14 +19,14 @@ paths:
   /contacts:
     post:
       summary: Creates a new contact
-      operationId: createCourse
+      operationId: createContacts
       parameters:
         - name: contact
           in: body
           required: true
           description: Contact Object
           schema:
-            $ref: '#/definitions/CourseInput'
+            $ref: '#/definitions/ContactInput'
       responses:
         '201':
           description: Created
@@ -40,12 +40,12 @@ paths:
             $ref: '#/definitions/ErrorModel'
     get:
       summary: Returns all contacts
-      operationId: getAllCourses
+      operationId: getAllContacts
       responses:
         '200':
           description: Ok
           schema:
-            $ref: '#/definitions/CoursesList'
+            $ref: '#/definitions/ContactsList'
         '406':
           description: Not Acceptable (Invalid Params)
           schema:
@@ -55,14 +55,14 @@ paths:
           schema:
             $ref: '#/definitions/ErrorModel'
 
-  /contacts/{code}:
+  /courses/{id}:
     get:
-      summary: Returns a contact with the given code
-      operationId: getCourseByCode
+      summary: Returns a contact with the given id
+      operationId: getContactByCode
       parameters:
-        - name: code
+        - name: id
           in: path
-          description: The code of the contact to be returned
+          description: The id of the contact to be returned
           required: true
           type: integer
       responses:
@@ -84,20 +84,20 @@ paths:
             $ref: '#/definitions/ErrorModel'
 
     put:
-      summary: Updates a contact with the given code
-      operationId: updateCourse
+      summary: Updates a contact with the given id
+      operationId: updateContact
       parameters:
-        - name: code
+        - name: id
           in: path
-          description: The code of the contact to be updated
+          description: The id of the contact to be updated
           required: true
           type: integer
         - name: contact
           in: body
           required: true
-          description: Contact Object
+          description: Course Object
           schema:
-            $ref: '#/definitions/CourseInput'
+            $ref: '#/definitions/ContactInput'
       responses:
         '204':
           description: No Content
@@ -115,12 +115,12 @@ paths:
             $ref: '#/definitions/ErrorModel'
 
     delete:
-      summary: Deletes a contact with the given code
-      operationId: deleteCourse
+      summary: Deletes a contact with the given id
+      operationId: deleteContact
       parameters:
-        - name: code
+        - name: id
           in: path
-          description: The code of the contact to be deleted
+          description: The id of the course to be deleted
           required: true
           type: integer
       responses:
@@ -141,26 +141,38 @@ paths:
 
 definitions:
 
-  # Courses
+  # Contacts
   Contact:
     type: object
     properties:
-      code:
+      id:
         type: integer
       name:
         type: string
-      credits:
-        type: integer
+      lastName:
+        type: string
+      email:
+        type: string
+      subject:
+        type: string
+      message:
+        type: string
 
-  CourseInput:
+  ContactInput:
     type: object
     properties:
       name:
         type: string
-      credits:
-        type: integer
+      lastName:
+        type: string
+      email:
+        type: string
+      subject:
+        type: string
+      message:
+        type: string
 
-  CoursesList:
+  ContactsList:
     type: object
     required:
       - total
@@ -178,11 +190,11 @@ definitions:
     type: object
     required:
       - message
-      - code
+      - id
     properties:
       message:
         type: string
-      code:
+      id:
         type: number
       description:
         type: object
