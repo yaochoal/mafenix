@@ -1,0 +1,15 @@
+version: "2"
+services:
+  scoreresources-ms:
+    build: .
+    ports:
+      - "5000:5000"
+    links:
+      - scoreresources-db
+  scoreresources-db:
+    image: mongo
+    volumes:
+      - /data/mongodb/db:/data/db
+    ports:
+      - "27017:27017"
+
