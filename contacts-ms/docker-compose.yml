@@ -1,0 +1,28 @@
+version: "2.1"
+services:
+  contacts-ms:
+    build: .
+    ports:
+      - "6000:6000"
+    depends_on:
+      contacts-db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -I contacts-ms:3000/contacts-ms/resources/contact/ --fail"
+      interval: 20s
+      retries: 10
+
+  contacts-db:
+    image: mysql:5.7
+    healthcheck:
+      test: "mysqlcheck -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE"
+      interval: 20s
+      timeout: 5s
+      retries: 15
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: contacts-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
