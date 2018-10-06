@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: teacher_has_resources
+#
+#  id          :integer          not null, primary key
+#  teacher_id  :integer
+#  resource_id :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  teacher: one
+  resource: one
+
+two:
+  teacher: two
+  resource: two

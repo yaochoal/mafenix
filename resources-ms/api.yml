@@ -1,0 +1,205 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for Resources
+  description: Go with Ruby on Rails and Postgres
+  license:
+    name: Yesid Alberto Ochoa Luque
+host: 192.168.99.101:4000
+basePath: /resources
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /resources:
+    post:
+      summary: Creates a new resources
+      operationId: createResources
+      parameters:
+        - name: resources
+          in: body
+          required: true
+          description: Resources Object
+          schema:
+            $ref: '#/definitions/ResourcesInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Resources'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all resources
+      operationId: getAllResources
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/ResourcesList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /resources/{id}:
+    get:
+      summary: Returns a resources with the given id
+      operationId: getResourcesByCode
+      parameters:
+        - name: id
+          in: path
+          description: The id of the resources to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Resources'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: Updates a course with the given id
+      operationId: updateResources
+      parameters:
+        - name: id
+          in: path
+          description: The id of the resources to be updated
+          required: true
+          type: integer
+        - name: resources
+          in: body
+          required: true
+          description: Resources Object
+          schema:
+            $ref: '#/definitions/ResourcesInput'
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Resources'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a resources with the given id
+      operationId: deleteResources
+      parameters:
+        - name: id
+          in: path
+          description: The id of the resources to be deleted
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/ResourcesCode'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+  
+  Resources:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      file:
+        type: string
+      link:
+        type: string
+
+  ResourcesInput:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      file:
+        type: object
+      
+
+  ResourcesList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Resources'
+  
+  ResourcesCode:
+    type: object
+    properties:
+      id:
+        type: integer
+        
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - mesage
+      - id
+    properties:
+      mesage:
+        type: string
+      id:
+        type: number
+      description:
+        type: object
+  
