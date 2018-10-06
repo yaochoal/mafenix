@@ -1,0 +1,182 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservice for comments
+  description: Python + Postgress
+  license:
+  name: MAFEnix
+host: '192.168.99.101:8000'
+basePath: /Comments
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /comments:
+    post:
+      summary: Creates a new comment
+      operationId: createComment
+      parameters:
+        - name: comment
+          in: body
+          required: true
+          description: Comment Object
+          schema:
+            $ref: '#/definitions/CommentInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Returns all comments
+      operationId: getAllComments
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/CommentList'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+  '/comments/{id}':
+    get:
+      summary: Returns a comment with the given id
+      operationId: getCommentByid
+      parameters:
+        - name: id
+          in: path
+          description: The id of the comment to be returned
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Comment'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    put:
+      summary: Updates a comment with the given id
+      operationId: updateComment
+      parameters:
+        - name: id
+          in: path
+          description: The id of the comment to be updated
+          required: true
+          type: integer
+        - name: comment
+          in: body
+          required: true
+          description: Comment Object
+          schema:
+            $ref: '#/definitions/CommentInput'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      summary: Deletes a comment with the given id
+      operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          description: The comment with the selected id will be deleted.
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+          description: Not Acceptable (Invalid Params)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+definitions:
+  Comment:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      service_id:
+        type: integer
+  CommentInput:
+    type: object
+    properties:
+      service_id:
+        type: integer
+      service:
+        type: string
+      user_id:
+        type: integer
+      comment:
+        type: string
+        
+  CommentList:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Comment'
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - id
+    properties:
+      message:
+        type: string
+      id:
+        type: number
+      description:
+        type: object
+
