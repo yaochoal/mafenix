@@ -14,5 +14,8 @@ services:
       RESOURCES_URL: '192.168.99.101'
       RESOURCES_PORT: '4000'
       RESOURCES_ENTRY: 'resources'
+      COMMENTS_URL: 'localhost'
+      COMMENTS_PORT: '8000'
+      COMMENTS_ENTRY: 'comments'
     ports:
       - '5000:5000'

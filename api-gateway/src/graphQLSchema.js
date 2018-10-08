@@ -14,6 +14,7 @@ import {
 	teachersMutations,
 	teachersQueries,
 	teachersTypeDef
+
 } from './teachers/typeDefs';
 
 import {
@@ -21,10 +22,18 @@ import {
 	resourcesQueries,
 	resourcesTypeDef
 } from './resources/typeDefs';
+import {
+	commentsMutations,
+	commentsQueries,
+	commentsTypeDef
+
+} from './comments/typeDefs';
+
 
 import coursesResolvers from './courses/resolvers';
 import teachersResolvers from './teachers/resolvers';
 import resourcesResolvers from './resources/resolvers';
+import commentsResolvers from './comments/resolvers';
 
 // merge the typeDefs
 const mergedTypeDefs = mergeSchemas(
@@ -32,17 +41,20 @@ const mergedTypeDefs = mergeSchemas(
 		'scalar JSON',
 		coursesTypeDef,
 		teachersTypeDef,
-		resourcesTypeDef
+		resourcesTypeDef,
+		commentsTypeDef
 	],
 	[
 		coursesQueries,
 		teachersQueries,
-		resourcesQueries
+		resourcesQueries,
+		commentsQueries
 	],
 	[
 		coursesMutations,
 		teachersMutations,
-		resourcesMutations
+		resourcesMutations,
+		commentsMutations
 	]
 	
 );
@@ -54,6 +66,7 @@ export default makeExecutableSchema({
 		{ JSON: GraphQLJSON }, // allows scalar JSON
 		coursesResolvers,
 		teachersResolvers,
-		resourcesResolvers
+		resourcesResolvers,
+		commentsResolvers
 	)
 });
