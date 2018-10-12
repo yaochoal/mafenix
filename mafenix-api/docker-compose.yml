@@ -1,0 +1,30 @@
+version: '2.1'
+services:
+  academy-api:
+    build: .
+    environment:
+      PORT: '5500'
+      SHOW_URLS: 'true'
+      COURSES_URL: '192.168.99.101'
+      COURSES_PORT: '4000'
+      COURSES_ENTRY: 'courses'
+      TEACHERS_URL: '192.168.99.101'
+      TEACHERS_PORT: '4000'
+      TEACHERS_ENTRY: 'teachers'
+      RESOURCES_URL: '192.168.99.101'
+      RESOURCES_PORT: '4000'
+      RESOURCES_ENTRY: 'resources'
+      COMMENTS_URL: '192.168.99.101'
+      COMMENTS_PORT: '8000'
+      COMMENTS_ENTRY: 'comments'
+      SCORECOMMENTS_URL: '192.168.99.101'
+      SCORECOMMENTS_PORT: '5000'
+      SCORECOMMENTS_ENTRY: 'scoreservice'
+      CONTACTS_URL: '192.168.99.101'
+      CONTACTS_PORT: '6000'
+      CONTACTS_ENTRY: 'contacts-ms/resources/contact'
+      USERS_URL: '192.168.99.101'
+      USERS_PORT: '3000'
+      USERS_ENTRY: 'users'
+    ports:
+      - '5500:5500'

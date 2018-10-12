@@ -5,15 +5,18 @@ import { formatError } from 'graphql';
  * Creates a request following the given parameters
  * @param {string} url
  * @param {string} method
+ * @param {string} token
  * @param {object} [body]
+ * @param {object} [auth]
  * @param {boolean} [fullResponse]
  * @return {Promise.<*>} - promise with the error or the response object
  */
-export async function generalRequest(url, method, body, fullResponse) {
+export async function generalRequest(url, method, body, token, fullResponse) {
 	const parameters = {
 		method,
 		uri: encodeURI(url),
 		body,
+		auth: {'bearer':token},
 		json: true,
 		resolveWithFullResponse: fullResponse
 	};
@@ -21,7 +24,6 @@ export async function generalRequest(url, method, body, fullResponse) {
 		// eslint-disable-next-line
 		console.log(url);
 	}
-
 	try {
 		return await request(parameters);
 	} catch (err) {
