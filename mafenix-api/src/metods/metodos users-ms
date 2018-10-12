@@ -1,0 +1,52 @@
+///////////todos los usuarios/////////////////
+query{
+  allUsers{
+    email
+    id
+    name
+    avatar
+    password
+  }
+}
+/////////////usuario individual/////////////
+query{
+  userById(id:"5bb5a405c854cc0001370ffb"){
+    email
+    id
+    name
+    avatar
+    password
+  }
+}
+///////////////////creacion de usuario////////////////
+mutation{
+  createUser(user:{
+    name:"alooo"
+    password:"1234"
+    email:"asdasdasd"
+		avatar:"este es elink"
+  }){
+    name
+  }
+}
+
+///////////////////obtener token/////////////////////
+query{
+  userToken(user:{
+    email:"correo@correo.com"
+    password:"123456"
+  }){
+    token
+  }
+}
+//////////////////decodificar token////////////////
+query{
+  userInfo(token:{
+    token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXIiOiJsaW5rIGRlIGF2YXRhciIsImVtYWlsIjoiY29ycmVvQGNvcnJlby5jb20iLCJpZCI6IjViYWZjMDNiOWYxNWVkMDAwMTBmM2YwYSIsIm5hbWUiOiJpdmFuIn0.4kyWcrCBnwrw3Czd5MYXmp9OKMqRA_kTvlgPng1-V9Y"
+  }){
+    name
+    id
+    email
+    avatar
+  }
+}

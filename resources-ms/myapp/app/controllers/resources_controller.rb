@@ -18,7 +18,9 @@ class ResourcesController < ApplicationController
   # POST /resources
   def create
     resource = Resource.create(name: params[:name],description: params[:description], file: params[:file])
+    if params[:file] != nil
     resource.link = url_for(resource.file)
+    end
     if resource.save
       render json: resource, status: :created, location: resource
     else
@@ -29,7 +31,9 @@ class ResourcesController < ApplicationController
   # PATCH/PUT /resources/1
   def update
     if @resource.update(name: params[:name],description: params[:description], file: params[:file])
-      @resource.link = url_for(@resource.file)
+      if params[:file] != nil
+      resource.link = url_for(resource.file)
+      end
       render json: @resource
     else
       render json: @resource.errors, status: :unprocessable_entity
