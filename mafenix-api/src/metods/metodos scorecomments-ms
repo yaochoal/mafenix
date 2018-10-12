@@ -1,0 +1,37 @@
+///////////todas las calificaciones//////////////////
+query{
+  allScoreComments{
+    _id
+    score
+    service
+    service_id
+    user_id
+  }
+}
+///////////////nueva calificacion///////////////
+mutation{
+  createScoreComment(scorecomment:{
+    score: 5
+    service:"resource"
+    service_id:1
+    user_id: 1
+  }){
+    score
+    service
+    service_id
+    user_id
+  }
+}
+/////////////calificaciones de un post////////
+query{
+  scorecommentByService(scorecomment:{
+    service:"resource"
+    service_id: 1
+  }){
+    malo
+    regular
+    medio
+    bueno
+    excelente
+  }
+}
