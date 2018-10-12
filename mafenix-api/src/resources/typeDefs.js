@@ -4,16 +4,24 @@ type Resource {
     name: String!
     description: String!
     link: String!
+    created_at: String!
+    course_has_resources: [Courses_has_resources]   
+    teacher_has_resources: [Teacher_has_resources]
 }
 
 input ResourceInput {
     name: String!
     description: String!
+}
+
+input ResourceSearch {
+    resource_name: String!
 }`;
 
 export const resourcesQueries = `
     allResources(page: Int!): [Resource]!
     resourceById(id: Int!): Resource!
+    resourceByName(resource: ResourceSearch!): [Resource]!
 `;
 
 export const resourcesMutations = `

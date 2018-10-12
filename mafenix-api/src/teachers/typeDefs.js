@@ -3,20 +3,11 @@ type Teacher {
     id: Int!
     name: String!
     description: String!
-    teacher_has_courses: [Courses]
-    teacher_has_resources: [Resources]
+    teacher_has_courses: [Teacher_has_courses]
+    teacher_has_resources: [Teacher_has_resources]
 }
-type Courses{
-    id: Int!
-    teacher_id: Int!
-    teacher_name: String!
-    teacher_description: String!
-    course_id: Int!
-    course_name: String!
-    course_description: String!
-    course_code: Int!
-}
-type Resources{
+
+type Teacher_has_resources{
     id: Int!
     teacher_id: Int!
     teacher_name: String!
@@ -29,11 +20,15 @@ type Resources{
 input TeacherInput {
     name: String!
     description: String!
+}
+input TeacherSearch {
+    teacher_name: String!
 }`;
 
 export const teachersQueries = `
     allTeachers(page: Int!): [Teacher]!
     teacherById(id: Int!): Teacher!
+    teacherByName(teacher: TeacherSearch!): [Teacher]!
 `;
 
 export const teachersMutations = `

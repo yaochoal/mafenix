@@ -1,0 +1,30 @@
+//////////////////////crear nuevo comentario//////////////////
+mutation{
+  createComment(comment:{
+    service_id: 1
+    service: "resource"
+    user_id: 2   
+    comment: "este es el nuevo comentario"
+  }){
+    id
+    service
+    service_id
+    user_id
+  }
+}
+//////////////////////////buscar comentarios de un servicio//////////////
+query{
+  commentByService(comment:{
+    service: "resources"
+    service_id: 1
+  }){
+    id
+    comment
+    service
+    service_id
+    user_id
+    created_at
+    
+  }
+}
+/////////////////////////////////////////////////////////////////////////

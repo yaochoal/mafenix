@@ -8,7 +8,7 @@ var TaskSchema = new Schema({
   service: String,
   service_id: Number,
   score: Number,
-  user_id: Number
+  user_id: String
    
 });
 

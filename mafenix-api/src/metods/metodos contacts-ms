@@ -1,0 +1,21 @@
+//////////////////////////todos los contactos////////////////
+query{
+  allContacts{
+    name
+    lastName
+    id
+    message
+    email
+  }
+}
+//////////////////////////crear nuevo contacto//////////////
+mutation{
+  createContact(contact:{
+    name :"nombre"
+    lastName:"apellido"
+    message:"este es el mensaje"
+    email: "ya@ya.com"
+  }){
+    
+  }
+}
