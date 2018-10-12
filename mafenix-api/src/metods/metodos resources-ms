@@ -1,0 +1,241 @@
+/////////////Get todos los cursos//////////////
+query{
+  allCourses(page:1){
+    id
+    name
+    description
+    code
+    teacher_has_courses {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    course_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+  }
+}
+///////////////get un recurso////////////////////
+query{
+  courseById(id:1){
+    id
+    name
+    description
+    code
+    teacher_has_courses {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    course_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+  }
+}
+//////////////get todos los profesores///////////
+query{
+  allTeachers(page:1){
+    id
+    name
+    description
+    teacher_has_courses {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    teacher_has_resources {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+    }
+  }
+}
+/////////////get un profesor////////////////
+query{
+  teacherById(id:1){
+    id
+    name
+    description
+    teacher_has_courses {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    teacher_has_resources {
+      id
+      teacher_id
+      teacher_name
+      teacher_description
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+    }
+  }
+}
+/////////////get todos los recursos////////////
+query{
+  allResources(page:1){
+    id
+    name
+    description
+    link
+    created_at
+    course_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    teacher_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      teacher_id
+      teacher_name
+      teacher_description
+    }
+  }
+}
+////////////////get un recurso///////////////////
+query{
+  resourceById(id:1){
+    id
+    name
+    description
+    link
+    created_at
+    course_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      course_id
+      course_name
+      course_description
+      course_code
+    }
+    teacher_has_resources {
+      id
+      resource_id
+      resource_name
+      resource_description
+      resource_link
+      teacher_id
+      teacher_name
+      teacher_description
+    }
+  }
+}
+/////////////crear recurso///////////////////////
+mutation{
+  createResource(resource:{
+    name: "Nuevo recurso"
+    description:"Descripcion del recurso"
+    
+  }){
+    id
+    name
+    description
+    created_at
+  }
+}
+
+/////////////////modificar recurso//////////////
+
+mutation{
+  updateResource(id:60,resource:{
+    name: "Nuevo recursodasdasd"
+    description:"Descirpcionasdasdasd del recurso"
+    
+  }){
+    id
+    name
+    description
+    created_at
+  }
+}
+/////////////buscar recurso////////////////
+query{
+  resourceByName(resource:{
+    resource_name: "Nuevo recurso" 
+  }){
+    id
+    name
+    description
+    created_at
+  }
+}
+////////////buscar curso///////////////////
+query{
+  courseByName(course:{
+    course_name: "Gerencia de recursos humanos" 
+  }){
+    id
+    name
+    description
+    code
+    
+    
+  }
+}
+/////////////buscar profesor//////////////
+query{
+  teacherByName(teacher:{
+    teacher_name: "HUGO ALBERTO HERRERA FONSECA" 
+  }){
+    id
+    name
+    description
+    
+  }
+}

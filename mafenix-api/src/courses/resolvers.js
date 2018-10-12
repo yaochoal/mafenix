@@ -5,17 +5,19 @@ const URL = `http://${url}:${port}/${entryPoint}`;
 
 const resolvers = {
 	Query: {
-		allTeachers: (_,{ page }) =>
+		allCourses: (_, { page }) =>
 			getRequest(`${URL}?page=${page}`, ''),
-		teacherById: (_, { id }) =>
+		courseById: (_, { id }) =>
 			generalRequest(`${URL}/${id}`, 'GET'),
+		courseByName: (_,{course})=>
+			generalRequest(`http://${url}:${port}/search`,'POST',course),
 	},
 	Mutation: {
-		createTeacher: (_, { teacher }) =>
-			generalRequest(`${URL}`, 'POST', teacher),
-		updateTeacher: (_, { id, teacher }) =>
-			generalRequest(`${URL}/${id}`, 'PUT', teacher),
-		deleteTeacher: (_, { id }) =>
+		createCourse: (_, { course }) =>
+			generalRequest(`${URL}`, 'POST', course),
+		updateCourse: (_, { id, course }) =>
+			generalRequest(`${URL}/${id}`, 'PUT', course),
+		deleteCourse: (_, { id }) =>
 			generalRequest(`${URL}/${id}`, 'DELETE')
 	}
 };

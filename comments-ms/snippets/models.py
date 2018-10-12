@@ -13,9 +13,9 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 class Snippet(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     service_id = models.IntegerField()
-    service = models.CharField(blank=True, default='', max_length=100)
+    service = models.CharField(blank=True, default='', max_length=200)
     comment = models.CharField(blank=True, default='', max_length=200)
-    user_id = models.IntegerField()
+    user_id = models.CharField(blank=True, default='', max_length=200)
     
     class Meta:
         ordering = ('created_at',)
