@@ -9,6 +9,8 @@ const resolvers = {
 			getRequest(`${URL}?page=${page}`, ''),
 		resourceById: (_, { id }) =>
 			generalRequest(`${URL}/${id}`, 'GET'),
+		resourceByName: (_,{resource})=>
+			generalRequest(`http://${url}:${port}/search`,'POST',resource)
 	},
 	Mutation: {
 		createResource: (_, { resource }) =>

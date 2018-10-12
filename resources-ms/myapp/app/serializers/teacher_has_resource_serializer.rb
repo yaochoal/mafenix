@@ -10,16 +10,21 @@
 #
 
 class TeacherHasResourceSerializer < ActiveModel::Serializer
-  attributes :id, :teacher_name,:teacher_description,:teacher_id,:resource_id,:resource_name
+  attributes :id, :teacher_id,:teacher_name,:teacher_description,:resource_id,:resource_name,:resource_description,:resource_link
   def teacher_name
   	Teacher.find(object.teacher_id).name
   end
   def teacher_description
   	Teacher.find(object.teacher_id).description
   end
-
   def resource_name
   	Resource.find(object.resource_id).name
+  end
+  def resource_description
+  	Resource.find(object.resource_id).description
+  end
+  def resource_link
+  	Resource.find(object.resource_id).link
   end
   
  
