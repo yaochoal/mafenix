@@ -37,7 +37,7 @@ type Exception struct {
 	Message string `json:"message"`
 }
 
-// GET list of movies
+// GET list of users
 func AllUsersEndPoint(w http.ResponseWriter, r *http.Request) {
 	users, err := dao.FindAll()
 	if err != nil {
@@ -47,7 +47,7 @@ func AllUsersEndPoint(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, users)
 }
 
-// GET a movie by its ID
+// GET a user by its ID
 func FindUserEndpoint(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	user, err := dao.FindById(params["id"])
@@ -58,7 +58,7 @@ func FindUserEndpoint(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, user)
 }
 
-// POST a new movie
+// POST a new user
 func CreateUserEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var user User
@@ -84,7 +84,7 @@ func CreateUserEndPoint(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// PUT update an existing movie
+// PUT update an existing user
 func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var user User
@@ -99,7 +99,7 @@ func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
-// DELETE an existing movie
+// DELETE an existing user
 func DeleteUserEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var user User
