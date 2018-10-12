@@ -14,11 +14,6 @@ services:
       RESOURCES_URL: '192.168.99.101'
       RESOURCES_PORT: '4000'
       RESOURCES_ENTRY: 'resources'
-<<<<<<< HEAD:api-gateway/docker-compose.yml
-      COMMENTS_URL: '0.0.0.0'
-      COMMENTS_PORT: '8000'
-      COMMENTS_ENTRY: 'comments'
-=======
       COMMENTS_URL: '192.168.99.101'
       COMMENTS_PORT: '8000'
       COMMENTS_ENTRY: 'comments'
@@ -31,6 +26,5 @@ services:
       USERS_URL: '192.168.99.101'
       USERS_PORT: '3000'
       USERS_ENTRY: 'users'
->>>>>>> develop:mafenix-api/docker-compose.yml
     ports:
       - '5500:5500'

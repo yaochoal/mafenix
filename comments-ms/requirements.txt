@@ -2,4 +2,3 @@ django
 djangorestframework
 pygments
 psycopg2
-django-cors-headers
