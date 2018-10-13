@@ -11,12 +11,31 @@ import { formatError } from 'graphql';
  * @param {boolean} [fullResponse]
  * @return {Promise.<*>} - promise with the error or the response object
  */
-export async function generalRequest(url, method, body, token, fullResponse) {
+export async function generalRequest1(url, method, body, token, fullResponse) {
 	const parameters = {
 		method,
 		uri: encodeURI(url),
 		body,
 		auth: {'bearer':token},
+		json: true,
+		resolveWithFullResponse: fullResponse
+	};
+	if (process.env.SHOW_URLS) {
+		// eslint-disable-next-line
+		console.log(url);
+	}
+	try {
+		return await request(parameters);
+	} catch (err) {
+		return err;
+	}
+}
+
+export async function generalRequest(url, method, body, fullResponse) {
+	const parameters = {
+		method,
+		uri: encodeURI(url),
+		body,
 		json: true,
 		resolveWithFullResponse: fullResponse
 	};
