@@ -8,8 +8,6 @@ import ListaMaterias from './ListaMaterias.js';
 import ListaRecursos from './ListaRecursos.js';
 import Grafico from '../Global/Grafico';
 //Assets
-import baseURL from '../../url';
-import { Doughnut } from 'react-chartjs-2';
 import { logPageView } from '../../analytics';
 //graphql
 import ApolloClient from 'apollo-boost';
