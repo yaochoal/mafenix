@@ -8,7 +8,7 @@ services:
       contacts-db:
         condition: service_healthy
     healthcheck:
-      test: "curl -I contacts-ms:3000/contacts-ms/resources/contact/ --fail"
+      test: "curl -I contacts-ms:6000/contacts-ms/resources/contact/ --fail"
       interval: 20s
       retries: 10
 

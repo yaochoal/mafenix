@@ -224,8 +224,6 @@ query{
     name
     description
     code
-    
-    
   }
 }
 /////////////buscar profesor//////////////

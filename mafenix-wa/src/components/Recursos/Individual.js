@@ -12,7 +12,6 @@ import store from '../../store';
 import Grafico from '../Global/Grafico';
 //Assets
 import baseURL from '../../url';
-import { Document,Page } from 'react-pdf';
 import { logPageView } from '../../analytics';
 import swal from 'sweetalert2';
 import ApolloClient from 'apollo-boost';
@@ -105,9 +104,7 @@ constructor() {
 			this.setState({nombreErr: ''});
 		}
 	}
-	onDocumentLoad = ({ numPages }) => {
-	this.setState({ numPages });
-  }
+
 
 	ModificarRecurso=(e)=>{
 		if(this.state.mensaje === '' || this.state.nombre === '' || this.state.datos === null){
@@ -139,28 +136,11 @@ constructor() {
 		}
 
 	}
-	paginacion=(e)=>{
-		
-		if(e.target.id==="prev" && this.state.pageNumber >= 1 && this.state.pageNumber <=this.state.numPages ){
-			this.setState({})
-			this.setState({pageNumber: this.state.pageNumber - 1});
-		}
-		if(e.target.id==="next" && this.state.pageNumber >= 1 && this.state.pageNumber <=this.state.numPages )
-			
-		{
-		this.setState({pageNumber: this.state.pageNumber + 1});
-		}
-		if(this.state.pageNumber===0){
-			this.setState({pageNumber: 1})
-		}
-		if(this.state.pageNumber===this.state.numPages+1){
-			this.setState({pageNumber: this.state.numPages})
-		}
-	}
+	
 	render() {
 		
 		if(localStorage.getItem('jwtToken')){
-		 const { pageNumber, numPages } = this.state;
+		 
 		
 		return (
 			<div >
@@ -180,13 +160,15 @@ constructor() {
 												<h6 className="text wow fadeInLeft animated"><a>Description</a></h6>
 												<div className="s-property-content">
 													<p>{this.state.data_a.description}</p>
+													{/*
 												 <Document file={this.state.data_a.link} onLoadSuccess={this.onDocumentLoad}>
 													 <Page pageNumber={pageNumber} />
-															  </Document>
+													</Document>
 												  <p>Page {pageNumber} of {numPages}</p>
 												  <button type="submit"id="prev" className="btn btn-primary" onClick ={this.paginacion}> Prev</button>
 												  <button type="submit"id="next" className="btn btn-primary" onClick ={this.paginacion}> Next</button>
-												</div>
+												*/}
+												  </div>
 												<Comentarios recurso="resources" post_id={this.props.match.params.id}/>
 											</section>
 										</div>
@@ -244,7 +226,6 @@ constructor() {
 
 			</div>
 		);}else{
- const { pageNumber, numPages } = this.state;
 			return(<div>
 			<div >
 			<Title title={this.state.data_a.name}/>
@@ -263,13 +244,16 @@ constructor() {
 												<h6 className="text wow fadeInLeft animated"><a>Description</a></h6>
 												<div className="s-property-content">
 													<p>{this.state.data_a.description}</p>
+													{/*
 												 <Document file={this.state.data_a.link} onLoadSuccess={this.onDocumentLoad}>
 													 <Page pageNumber={pageNumber} />
 															  </Document>
-												  <p>Page {pageNumber} of {numPages}</p>
+													
+															  <p>Page {pageNumber} of {numPages}</p>
 												  <button type="submit"id="prev" className="btn btn-primary" onClick ={this.paginacion}> Prev</button>
 												  <button type="submit"id="next" className="btn btn-primary" onClick ={this.paginacion}> Next</button>
-												</div>
+												*/}
+												  </div>
 												<Comentarios recurso="resources" post_id={this.props.match.params.id}/>
 											</section>
 										</div>

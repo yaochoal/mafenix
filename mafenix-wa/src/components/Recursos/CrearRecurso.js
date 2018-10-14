@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Title from '../Global/Title';
-import baseURL from '../../url'
 import swal from 'sweetalert2'
-import FileBase64 from 'react-file-base64';
-import axios from 'axios';
-import store from '../../store';
 import { logPageView } from '../../analytics';
+
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+const client = new ApolloClient({
+  uri: "http://192.168.99.101:5500/graphql"
+});
 class Contenido extends Component {
  constructor(props){
 				super(props);
@@ -15,7 +17,8 @@ class Contenido extends Component {
 						nombreErr :'',
 						datos: null,
 						mensaje : '',
-						mensajeErr: ''
+						mensajeErr: '',
+						file: []
 				}
 				this.handleInput =this.handleInput.bind(this);
 				this.validar = this.validar.bind(this);
@@ -40,34 +43,44 @@ class Contenido extends Component {
 				
 
 		}
-
+		onChange=(e)=>{
+			let files = e.target.files
+			//console.warn("datafile",files[0])
+			this.setState({
+				file:files[0]
+		});
+		}
 		onSubmit(e){
 
 //        console.log(this.state);
 				e.preventDefault();
-				if((this.state.nombreErr !=="" || this.state.nombre === '' || this.state.datos=== null || this.state.mensaje === '')  ){
+				if((this.state.nombreErr !=="" || this.state.nombre === '' || this.state.file=== null || this.state.mensaje === '')  ){
 					 swal("Llene los campos señalados",'','error'); 
 				}else{
-						let axiosConfig = {
-				 headers: {
-					 'Content-Type': 'application/json;'
-									}
-							};
-							axios.post(`${baseURL}/tests`, {
-				resource: this.state.datos.base64,
-				 name: this.state.nombre,
-				 description: this.state.mensaje,
-				 user_id: store.getState().id
-			 }, axiosConfig)
-			 .then(function (response) {
-			 //  this.setState({response.data.id});
-				 
-				})
-				.catch(function (error) {
-				console.log(error);
-			 });
+					console.log(this.state);
 
-						swal("Su recurso ha sido creado",'','success');
+			
+						client.mutate({
+							mutation: gql`
+							mutation{
+								createResource(resource:{
+								  name: "${this.state.nombre}"
+								  description:"${this.state.mensaje}"
+								  file: ${this.state.file}
+								}){
+								  id
+								  name
+								  description
+								  created_at
+								}
+							  }
+							`
+						  })
+						  .then(data => {
+							console.log(data.data.createResource)
+							swal("Su recurso ha sido creado",'','success');
+						  })
+						  .catch(error => console.error(error));
 				}
 				this.setState( {
 						nombre : '',
@@ -76,19 +89,7 @@ class Contenido extends Component {
 						mensajeErr: ''
 
 				});  
-
-				
-
-
-			
 			 };
-
-
-		getFiles(files){
-	 this.setState({datos: files})
- //  console.log(this.state.datos);
-	}
-
 
 
 	render(){
@@ -113,9 +114,7 @@ class Contenido extends Component {
 												</div>
 												 <div className="form-group">
 														<label >Archivo del recurso: </label>
-												<FileBase64 className="form-control"
-										multiple={ false }
-										 onDone={ this.getFiles.bind(this) } />
+												<input type="file" name ="file" onChange={this.onChange}/>
 										 </div>
 										</div>
 										<div className="col-sm-12 text-center">
