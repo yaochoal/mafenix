@@ -833,7 +833,7 @@ Course.create([
     50.times do
         Resource.create([{
           name: Faker::Job.title,
-          link: "http://localhost:3000/uploads/resource/resource/pdf-sample.pdf",
+          link: "http://www.pdf995.com/samples/pdf.pdf",
           description: Faker::RickAndMorty.quote
          
          

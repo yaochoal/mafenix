@@ -16,4 +16,5 @@ class Teacher < ApplicationRecord
     #asosiacion de profesores a recurso
     has_many :teacher_has_resources
     has_many :resources, through: :teacher_has_resources
+    scope :search, ->(params){where("name iLIKE ?",params)}
 end

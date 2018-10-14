@@ -19,4 +19,5 @@ class Resource < ApplicationRecord
     #asociacion de recursos a materias
     has_many :course_has_resources
     has_many :courses, through: :course_has_resources
+    scope :search, ->(params){where("name iLIKE ?",params)}
 end
