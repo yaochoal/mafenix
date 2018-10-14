@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import baseURL from '../../url';
 import swal from 'sweetalert2';
+
+//graphql
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+const client = new ApolloClient({
+  uri: "http://192.168.99.101:5500/graphql"
+});
+
 class Busqueda extends Component {
 	constructor() {
     super()
-    this.state = {  value: "teacher", texto: "",likes:0}
-    
+    this.state = {  value: "teacher", texto: ""}
   }
 
   cambiarEstado=(e)=>{
-  	
       if(e.target.id==="basic"){
       this.setState({value: e.target.value});
       }
@@ -19,37 +23,77 @@ class Busqueda extends Component {
         console.log(e.target.value)
       this.setState({texto: e.target.value});
       }
-      if(e.target.id==="likes"){
-        console.log(e.target.value)
-      this.setState({likes: e.target.value});
-      }
   }
   realizarBusqueda=(e)=>{
-   // console.log(this.state)
-    var ruta = "";
-    if(this.state.value==="teacher")
-      ruta = "docentes";
-    if(this.state.value==="resource")
-      ruta = "recursos";
-    if(this.state.value==="course")
-      ruta = "materias";
-     let axiosConfig = {headers: {'Content-Type': 'application/json;'}};
-        axios.post(`${baseURL}/search`, {
-         [`${this.state.value}_name`]: this.state.texto,
-         likes: this.state.likes
-
-       }, axiosConfig)
-       .then(function (response) {
-       	
-        console.log(response.data[0].id)
-        window.location.replace(`${ruta}/${response.data[0].id}`);
-       //  this.setState({response.data.id});
-
-        })
-        .catch(function (error) {
-        	swal("Ningun dato encontrado",'','error');
-        console.log(error);
-       });
+		if(this.state.value==="teacher"){
+      client.query({
+        query: gql`
+        query{
+          teacherByName(teacher:{
+            teacher_name: "${this.state.texto}" 
+          }){
+            id
+            name
+            description
+          }
+        }
+        `
+      })
+      .then(data => {
+        //console.log(data.data.teacherByName);
+        window.location.replace(`docentes/${data.data.teacherByName[0].id}`);
+      })
+      .catch(error => {console.error(error)
+        swal("Ningun dato encontrado",'','error'); 
+      });
+     
+    }
+      
+    if(this.state.value==="resource"){
+      client.query({
+        query: gql`
+        query{
+          resourceByName(resource:{
+            resource_name: "${this.state.texto}" 
+          }){
+            id
+            name
+            description
+            created_at
+          }
+        }`
+      })
+      .then(data => {
+       // console.log(data.data.resourceByName);
+       window.location.replace(`recursos/${data.data.resourceByName[0].id}`);
+      })
+      .catch(error => {console.error(error)
+        swal("Ningun dato encontrado",'','error'); });
+      
+    }
+      
+    if(this.state.value==="course"){
+      client.query({
+        query: gql`
+        query{
+          courseByName(course:{
+            course_name: "${this.state.texto}" 
+          }){
+            id
+            name
+            description
+            code
+          }
+        }`
+      })
+      .then(data => {
+        //console.log(data.data.courseByName);
+        window.location.replace(`materias/${data.data.courseByName[0].id}`);
+      })
+      .catch(error => {console.error(error)
+        swal("Ningun dato encontrado",'','error'); });
+      
+    }
   }
 	render(){
 		
@@ -80,8 +124,6 @@ class Busqueda extends Component {
                                         </select>
 										</div>
 										<div className="col-xs-6">
-											<label >Likes Minimos:</label>
-											<input type="text" id="likes" onChange={this.cambiarEstado} value={this.state.text} className="form-control" placeholder="Likes minimos..."/>
 										
 										</div>
 									</div>

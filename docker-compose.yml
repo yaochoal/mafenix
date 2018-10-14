@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+  comments-db:
+    image: postgres
+  comments-ms:
+    build: ./comments-ms
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - comments-db
+  contacts-ms:
+    build: ./contacts-ms
+    ports:
+      - "6000:6000"
+    depends_on:
+      - contacts-db
+    healthcheck:
+      test: "curl -I contacts-ms:6000/contacts-ms/resources/contact/ --fail"
+      interval: 20s
+      retries: 10
+  contacts-db:
+    image: mysql:5.7
+    healthcheck:
+      test: "mysqlcheck -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE"
+      interval: 20s
+      timeout: 5s
+      retries: 15
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: contacts-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
+  resources-db:
+    image: postgres
+  resources-ms:
+    build: ./resources-ms
+    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    volumes:
+      - ./myapp
+    ports:
+      - "4000:4000"
+    depends_on:
+      - resources-db
+  scoreresources-ms:
+    build: ./scoreresources-ms
+    ports:
+      - "5000:5000"
+    links:
+      - scoreresources-db
+  scoreresources-db:
+    image: mongo
+    ports:
+      - "27017:27017"
+  users-ms:
+    build: ./users-ms/users-restapi
+    networks:
+      - mongo-go
+      - nginx-go
+    ports: 
+      - 3000:3000
+    depends_on:
+      - users-db
+  users-nginx:
+    image: itwars/nginx-http2
+    ports:
+            - 80:80
+            - 443:443
+    networks: 
+            - nginx-go
+    depends_on:
+      - users-ms
+  users-db:
+    image: itwars/mongodb
+    volumes:
+            - mongodb-data:/data/db
+    networks:
+      - mongo-go
+    ports:
+            - 28017:28017
+networks:
+  mongo-go:
+  nginx-go:
+volumes:
+  mongodb-data:
+
+  

@@ -1,6 +1,6 @@
 ///////////todas las calificaciones//////////////////
 query{
-  allScoreComments{
+  allScoreResources{
     _id
     score
     service
@@ -10,7 +10,7 @@ query{
 }
 ///////////////nueva calificacion///////////////
 mutation{
-  createScoreComment(scorecomment:{
+  createScoreResource(scoreresource:{
     score: 5
     service:"resource"
     service_id:1
@@ -24,7 +24,7 @@ mutation{
 }
 /////////////calificaciones de un post////////
 query{
-  scorecommentByService(scorecomment:{
+  scoreresourceByService(scoreresource:{
     service:"resource"
     service_id: 1
   }){

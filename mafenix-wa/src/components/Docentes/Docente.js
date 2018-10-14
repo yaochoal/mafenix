@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 //Assets
-import Like from '../Global/images/like.png';
-import Dislike from '../Global/images/dislike.png';
+
 import Image from '../Global/images/perfil.png';
 
 class Docente extends Component {
@@ -24,8 +23,7 @@ class Docente extends Component {
 						<span className="proerty-price pull-left limit"> {this.props.description}</span>
 				
 						<div className="property-icon">
-							<img src={Like} alt=""/>({this.props.likes})
-							<img src={Dislike} alt=""/>({this.props.dislikes})
+							
 						</div>
 					</div>
 				</div>

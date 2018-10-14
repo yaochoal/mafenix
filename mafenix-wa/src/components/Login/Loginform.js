@@ -5,11 +5,18 @@
 //https://apps.twitter.com/
 //https://console.firebase.google.com/project/mafe-app/overview
 import React, { Component } from 'react';
-import { loginUser } from './loginUser';
-import { obtenerDatos, pPost } from './obtenerDatos';
+import { pPost } from './obtenerDatos';
 import firebase from 'firebase'
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
+
+//graphiql
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+const client = new ApolloClient({
+  uri: "http://192.168.99.101:5500/graphql"
+});
+
 class Loginform extends Component {
 constructor() {
     super();
@@ -17,14 +24,7 @@ constructor() {
     logPageView();
   }
 
-  componentWillMount(){
-    //obtener datos del token jwt en el link users
-    if (localStorage.getItem('jwtToken')) {
-      obtenerDatos(localStorage.getItem('jwtToken'),'users').then((users) => {
-        this.setState({ s_users: users })
-      })
-    }
-  }
+ 
   
  setField (e) {
   if(e.target.id === 'email'){
@@ -41,25 +41,38 @@ constructor() {
 
 
 handleSubmit = (e) =>{
+  
      e.preventDefault()
-      const loginParams = {"auth": {"email": this.state.email, "password": this.state.password}}
-      loginUser(loginParams).then((token) => {
-      localStorage.setItem("jwtToken", token.jwt)
-    }).then(  this.setState({error: null}) ).catch((error) => {
-      this.setState({error: "Email o contraseña incorrecta"})
-    });
-    if(this.state.error === null){
-    setTimeout(function(){document.location.reload()},1000);
-    swal({
-      title:'Cargando...',
-      text:'',
-      timer:1000,
-      onOpen: () =>{
-        swal.showLoading()
+     this.setState({error: null});
+     client.query({
+      query: gql`
+      query{
+        userToken(user:{
+          email:"${this.state.email}"
+          password:"${this.state.password}"
+        }){
+          token
+        }
       }
+      `
     })
-    }
-    
+    .then(data => {
+      console.log(data.data.userToken.token)
+      localStorage.setItem("jwtToken", data.data.userToken.token)
+      if(this.state.error === null){
+        setTimeout(function(){document.location.reload()},1000);
+        swal({
+          title:'Cargando...',
+          text:'',
+          timer:1000,
+          onOpen: () =>{
+            swal.showLoading()
+          }
+        })
+        }
+    })
+    .catch(error => {console.error(error)
+      this.setState({error: "Email o contraseña incorrecta"})});
   }
 
   googleResponse = (response) => {
