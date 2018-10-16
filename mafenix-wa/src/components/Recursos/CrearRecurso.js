@@ -3,11 +3,27 @@ import Title from '../Global/Title';
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
 
-import ApolloClient from 'apollo-boost';
-import gql from "graphql-tag";
+import axios from 'axios';
+//import { Mutation } from 'react-apollo';
+//import Dropzone from 'react-dropzone';
+
+//import gql from "graphql-tag";
+//import { createUploadLink } from 'apollo-upload-client';
+//import { ApolloClient } from 'apollo-client';
+//import { InMemoryCache } from 'apollo-cache-inmemory';
+/*
+const link = createUploadLink({ uri: 'http://192.168.99.101:5500/graphql' });
 const client = new ApolloClient({
-  uri: "http://192.168.99.101:5500/graphql"
+  link,
+  cache: new InMemoryCache(),
 });
+
+const uploadFileMutation = gql`
+  mutation($file: Upload!) {
+    uploadFile(file: $file)
+  }
+`;
+*/
 class Contenido extends Component {
  constructor(props){
 				super(props);
@@ -30,7 +46,6 @@ class Contenido extends Component {
 				this.setState({
 						[e.target.name]:e.target.value
 				});
-	 
 		};
 		validar(e){
 				if ((this.state.nombre.length <3 && this.state.nombre.length!==0)|| ((this.state.nombre === "")&&(e.target.name ==='nombre'))){
@@ -40,8 +55,6 @@ class Contenido extends Component {
 				if(this.state.nombre.length >=3){
 						this.setState({nombreErr: ''});
 				}
-				
-
 		}
 		onChange=(e)=>{
 			let files = e.target.files
@@ -57,41 +70,54 @@ class Contenido extends Component {
 				if((this.state.nombreErr !=="" || this.state.nombre === '' || this.state.file=== null || this.state.mensaje === '')  ){
 					 swal("Llene los campos señalados",'','error'); 
 				}else{
-					console.log(this.state);
-
-			
+					//console.log(this.state.file);
+					/*
 						client.mutate({
 							mutation: gql`
 							mutation{
 								createResource(resource:{
 								  name: "${this.state.nombre}"
 								  description:"${this.state.mensaje}"
-								  file: ${this.state.file}
+								  
 								}){
 								  id
-								  name
-								  description
-								  created_at
 								}
 							  }
 							`
 						  })
 						  .then(data => {
-							console.log(data.data.createResource)
+							console.log(data.data.createResource.id)
 							swal("Su recurso ha sido creado",'','success');
 						  })
 						  .catch(error => console.error(error));
+						  */
+						 var bodyFormData = new FormData();
+						 bodyFormData.set('name', `${this.state.nombre}`);
+						 bodyFormData.set('description', `${this.state.mensaje}`);
+						 bodyFormData.append('file', this.state.file); 
+						  axios({
+							method: 'post',
+							url: 'http://192.168.99.101:4000/resources/',
+							data: bodyFormData,
+							config: { headers: {'Content-Type': 'multipart/form-data' }}
+							})
+							.then(function (response) {
+								//handle success
+								console.log(response);
+							})
+							.catch(function (response) {
+								//handle error
+								console.log(response);
+							});
+						  
 				}
 				this.setState( {
 						nombre : '',
 						nombreErr :'',
 						mensaje : '',
 						mensajeErr: ''
-
 				});  
 			 };
-
-
 	render(){
 		return(<div>
 			<Title title='Crear recurso'/>
@@ -115,11 +141,20 @@ class Contenido extends Component {
 												 <div className="form-group">
 														<label >Archivo del recurso: </label>
 												<input type="file" name ="file" onChange={this.onChange}/>
+												
 										 </div>
 										</div>
 										<div className="col-sm-12 text-center">
 												<button type="submit" className="btn btn-primary" onClick ={this.onSubmit}><i className="fa fa-envelope-o"  ></i> Crear recurso</button>
-										</div>
+			{/*																			<Mutation mutation={uploadFileMutation}>
+    {mutate => (
+      <Dropzone onDrop={([file]) => mutate({ variables: { file } })}>
+        <p>Try dropping some files here, or click to select files to upload.</p>
+      </Dropzone>
+    )}
+	</Mutation>*/}
+
+										</div> 
 
 								</div>
 

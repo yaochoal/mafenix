@@ -5,7 +5,7 @@
 //https://apps.twitter.com/
 //https://console.firebase.google.com/project/mafe-app/overview
 import React, { Component } from 'react';
-import { pPost } from './obtenerDatos';
+//import { pPost } from './obtenerDatos';
 import firebase from 'firebase'
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
@@ -41,7 +41,6 @@ constructor() {
 
 
 handleSubmit = (e) =>{
-  
      e.preventDefault()
      this.setState({error: null});
      client.query({
@@ -78,13 +77,10 @@ handleSubmit = (e) =>{
   googleResponse = (response) => {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
-     const loginParams = {"name": result.additionalUserInfo.profile.name,"email": result.additionalUserInfo.profile.email,
-     "avatar": result.additionalUserInfo.profile.picture }
-      pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
+     
+    console.log(result.additionalUserInfo.profile);
      // console.log(token.jwt);
-     localStorage.setItem("jwtToken", token.jwt)
+      /*
       setTimeout(function(){document.location.reload()},1000);
       swal({
       title:'Cargando...',
@@ -92,8 +88,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
+        */
    
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
@@ -118,14 +113,9 @@ handleSubmit = (e) =>{
  twitterResponse = (response) => {
  var provider = new firebase.auth.TwitterAuthProvider();
  firebase.auth().signInWithPopup(provider).then(function(result) {
-  const loginParams = {"name": result.additionalUserInfo.profile.name,"email": `${result.additionalUserInfo.profile.screen_name}@correo.com`,
-     "avatar": result.additionalUserInfo.profile.profile_image_url }
-     
-     pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
+  console.log(result);
      // console.log(token.jwt);
-     localStorage.setItem("jwtToken", token.jwt)
+      /*
       setTimeout(function(){document.location.reload()},1000);
       swal({
       title:'Cargando...',
@@ -133,9 +123,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
-   
+        */
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
     }
@@ -158,12 +146,8 @@ handleSubmit = (e) =>{
  facebookResponse = (response) => {
   var provider = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(result) {
- const loginParams = {"name": result.additionalUserInfo.profile.name,"email": result.additionalUserInfo.profile.email,
-     "avatar": result.additionalUserInfo.profile.picture.data.url }
-      pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
-     // console.log(token.jwt);
+    console.log(result.additionalUserInfo.profile);
+     /*
      localStorage.setItem("jwtToken", token.jwt)
       setTimeout(function(){document.location.reload()},1000);
       swal({
@@ -172,9 +156,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
-   
+   */
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
     }

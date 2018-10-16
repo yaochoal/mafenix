@@ -6,8 +6,6 @@ import Title from '../Global/Title';
 import Busqueda from '../Global/Busqueda.js';
 import Contenido from './Contenido.js';
 import { Link } from "react-router-dom";
-
-
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 const client = new ApolloClient({

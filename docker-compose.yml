@@ -14,21 +14,13 @@ services:
       - comments-db
   contacts-ms:
     build: ./contacts-ms
+    image: contacts-ms
     ports:
       - "6000:6000"
     depends_on:
       - contacts-db
-    healthcheck:
-      test: "curl -I contacts-ms:6000/contacts-ms/resources/contact/ --fail"
-      interval: 20s
-      retries: 10
   contacts-db:
     image: mysql:5.7
-    healthcheck:
-      test: "mysqlcheck -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE"
-      interval: 20s
-      timeout: 5s
-      retries: 15
     environment:
       MYSQL_ROOT_PASSWORD: 123
       MYSQL_DATABASE: contacts-db

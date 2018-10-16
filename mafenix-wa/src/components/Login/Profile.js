@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import store from '../../store';
-import FileBase64 from 'react-file-base64';
 import axios from 'axios'
 import baseURL from '../../url'
 import swal from 'sweetalert2'
@@ -10,8 +9,7 @@ class Profile extends Component {
     this.state = {   nombre : '',
             nombreErr :'',
             correo : '',
-            correoErr : ''
-            
+            correoErr : ''         
           }
     this.handleFinish.bind(this);
     this.handleInput =this.handleInput.bind(this);
@@ -138,16 +136,21 @@ onSubmit(e){
           <div className="form-group">
            <h4 className="s-property-title">Nombre de usuario:</h4>
                       <label>{store.getState().username}</label>
+                      {/*
             <input name="nombre" type="text" value={this.state.nombre}  onChange = {this.handleInput} className="form-control" placeholder="Tu nombre de usuario..." />
-          </div>
+                      */}
+            </div>
           <div className="form-group">
             <h4 className="s-property-title">Correo electronico:</h4>
                         <label>{store.getState().email}</label>
+                        {/*
             <input name="correo" type="text" value={this.state.correo} onChange = {this.handleInput} className="form-control" placeholder="Tu nuevo correo..." />
-          </div> 
+                          */}
+            </div> 
+             {/*
           <div className="form-group">
             <div className="form-group">
-   
+  
             <h4 className="s-property-title">Personaliza tu imagen:</h4>
             <FileBase64 className="form-control"
                     multiple={ false }
@@ -155,9 +158,11 @@ onSubmit(e){
            
              </div>
              <button type="submit" onClick={this.onSubmit} className="btn btn-default">Actualizar tus Datos</button>
-             <button type="submit" onClick={this.handleFinish} className="btn btn-default">Cerrar sesión</button>
+            
 
           </div>
+          */}
+           <button type="submit" onClick={this.handleFinish} className="btn btn-default">Cerrar sesión</button>
         </div>
       </div>
                   <hr />

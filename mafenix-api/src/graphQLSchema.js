@@ -1,7 +1,6 @@
 import merge from 'lodash.merge';
 import GraphQLJSON from 'graphql-type-json';
-import { makeExecutableSchema } from 'graphql-tools';
-
+import { makeExecutableSchema} from 'graphql-tools';
 import { mergeSchemas } from './utilities';
 
 import {
@@ -59,6 +58,7 @@ import usersResolvers from './users/resolvers';
 const mergedTypeDefs = mergeSchemas(
 	[
 		'scalar JSON',
+		'scalar Upload',
 		coursesTypeDef,
 		teachersTypeDef,
 		resourcesTypeDef,
@@ -92,7 +92,6 @@ const mergedTypeDefs = mergeSchemas(
 export default makeExecutableSchema({
 	typeDefs: mergedTypeDefs,
 	resolvers: merge(
-		{ JSON: GraphQLJSON }, // allows scalar JSON
 		coursesResolvers,
 		teachersResolvers,
 		resourcesResolvers,
@@ -101,4 +100,5 @@ export default makeExecutableSchema({
 		contactsResolvers,
 		usersResolvers,
 	)
+
 });
