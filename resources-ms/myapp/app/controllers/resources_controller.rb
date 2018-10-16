@@ -32,7 +32,8 @@ class ResourcesController < ApplicationController
   def update
     if @resource.update(name: params[:name],description: params[:description], file: params[:file])
       if params[:file] != nil
-      resource.link = url_for(resource.file)
+      @resource.link = url_for(@resource.file)
+
       end
       render json: @resource
     else

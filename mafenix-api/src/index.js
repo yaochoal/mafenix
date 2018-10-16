@@ -12,9 +12,11 @@ import { formatErr } from './utilities';
 const app = new Koa();
 const router = new KoaRouter();
 const PORT = process.env.PORT || 5500;
-
+var options = {
+	origin: '*'
+};
 app.use(koaLogger());
-app.use(koaCors());
+app.use(koaCors(options));
 
 // read token from header
 app.use(async (ctx, next) => {

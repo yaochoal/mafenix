@@ -178,17 +178,17 @@ query{
 }
 /////////////crear recurso///////////////////////
 mutation{
-  createResource(resource:{
-    name: "Nuevo recurso"
-    description:"Descripcion del recurso"
-    
-  }){
+	createResource(resource:{
+	name: "${this.state.nombre}"
+  description:"${this.state.mensaje}"
+	
+	}){
     id
-    name
-    description
-    created_at
-  }
-}
+  name
+ description
+	 created_at
+	}
+	  }
 
 /////////////////modificar recurso//////////////
 
@@ -237,6 +237,13 @@ query{
     
   }
 }
+
+# Delete all containers
+docker rm $(docker ps -aq)
+# Delete all images
+docker rmi $(docker images -q)
+# Delete all untagged images
+docker rmi $(docker images -q --filter "dangling=true")
 
 
 

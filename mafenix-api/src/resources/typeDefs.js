@@ -9,6 +9,7 @@ type Resource {
     teacher_has_resources: [Teacher_has_resources]
 }
 
+
 input ResourceInput {
     name: String!
     description: String!
@@ -25,6 +26,7 @@ export const resourcesQueries = `
 `;
 
 export const resourcesMutations = `
+    uploadFile(file: Upload!): Boolean
     createResource(resource: ResourceInput!): Resource!
     deleteResource(id: Int!): Int
     updateResource(id: Int!, resource: ResourceInput!): Resource!
