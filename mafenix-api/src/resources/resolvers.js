@@ -1,4 +1,4 @@
-import { generalRequest, getRequest } from '../utilities';
+import { generalRequest, getRequest, generalRequest2} from '../utilities';
 import { url, port, entryPoint } from './server';
 
 const URL = `http://${url}:${port}/${entryPoint}`;
@@ -13,6 +13,11 @@ const resolvers = {
 			generalRequest(`http://${url}:${port}/search`,'POST',resource)
 	},
 	Mutation: {
+		uploadFile: async (_, { file }) => {
+      	const { stream, filename } = await file;
+      	console.log(file);
+      	return true;
+    	},
 		createResource: (_, { resource }) =>
 			generalRequest(`${URL}`, 'POST', resource),
 		updateResource: (_, { id, resource }) =>

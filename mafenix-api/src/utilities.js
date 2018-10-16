@@ -50,6 +50,28 @@ export async function generalRequest(url, method, body, fullResponse) {
 	}
 }
 
+export async function generalRequest2(url, method, body, fullResponse) {
+	const parameters = {
+		method,
+		uri: encodeURI(url),
+		formData: {
+			name: body.name,
+			description: body.description,
+			file: body.file
+		},
+		resolveWithFullResponse: fullResponse
+	};
+	if (process.env.SHOW_URLS) {
+		// eslint-disable-next-line
+		console.log(url);
+	}
+	try {
+		return await request(parameters);
+	} catch (err) {
+		return err;
+	}
+}
+
 /**
  * Adds parameters to a given route
  * @param {string} url

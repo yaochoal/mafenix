@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Polar} from 'react-chartjs-2';
 import store from '../../store';
-import swal from 'sweetalert2';
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 
