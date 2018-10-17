@@ -2,6 +2,7 @@ import merge from 'lodash.merge';
 import GraphQLJSON from 'graphql-type-json';
 import { makeExecutableSchema} from 'graphql-tools';
 import { mergeSchemas } from './utilities';
+import { GraphQLUpload} from 'apollo-server'
 
 import {
 	coursesMutations,
@@ -92,6 +93,8 @@ const mergedTypeDefs = mergeSchemas(
 export default makeExecutableSchema({
 	typeDefs: mergedTypeDefs,
 	resolvers: merge(
+		{ JSON: GraphQLJSON }, // allows scalar JSON
+		{ Upload: GraphQLUpload} ,
 		coursesResolvers,
 		teachersResolvers,
 		resourcesResolvers,
