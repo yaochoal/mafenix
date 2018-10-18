@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet,Text,View,TextInput,TouchableOpacity, Alert} from 'react-native';
-import graphql from '../utils/graphQLUtils';
+import {Actions} from 'react-native-router-flux';
+import {client} from '../utils/graphQLUtils';
+import gql from "graphql-tag";
 
 export default class Form extends Component {
 
@@ -11,7 +13,9 @@ export default class Form extends Component {
         password: '',
     }
 }
-
+home() {
+    Actions.home()
+}
 
 handleSubmit(event) {
 
@@ -30,37 +34,64 @@ handleSubmit(event) {
         )
     }
 
-    // Ejemplo de uso GraphQL
-    let auth = `
-    query{
-      userToken(user:{
-        email:"${user}"
-        password:"${password}"
-      }){
-        token
-      }
-    }
-`;
-
-
-    graphql(auth, function (data) {
-        if (data) {
-            console.log(data.userToken.token);
-            //global.userToken = data.userToken.token;
-            //global.userId = data.userToken.id;
-            Actions.home();
-        }
-        else {
-            Alert.alert(
-                'Error al iniciar sesión',
-                'Los datos suministrados no corresponden con ningún usuario registrado',
-                [
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
-                ],
-                {cancelable: false}
-            )
-        }
-    });
+    client.query({
+        query: gql`
+        query{
+            userToken(user:{
+              email:"${user}"
+              password:"${password}"
+            }){
+              token
+            }
+          }
+          `
+      })
+      .then(data => {
+          console.log(data)
+            client.query({
+                query: gql`
+                query{
+                    userInfo(token:{
+                      token:"${data.data.userToken.token}"
+                    }){
+                      name
+                      id
+                      email
+                      avatar
+                    }
+                  }
+                `
+            })
+            .then(data1 => {
+                //console.log(data1.userInfo);
+                global.userData= data1.data.userInfo;
+                console.log("datos");
+                console.log(global.userData)
+                Actions.home();
+            })
+            .catch(error => {
+                console.log(error)
+                Alert.alert(
+                    'Error al iniciar sesión',
+                    'Error decodificando token',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    ],
+                    {cancelable: false}
+                )
+            });
+      })
+      .catch(error => {
+          console.log(error);
+          Alert.alert(
+            'Error al iniciar sesión',
+            'Los datos suministrados no corresponden con ningún usuario registrado',
+            [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            {cancelable: false}
+        )
+        });
 
 }
 
