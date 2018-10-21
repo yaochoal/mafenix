@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet,Text,View,TextInput,TouchableOpacity, Alert} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import GraphQLRequest from '../utils/graphQLUtils';
-import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 import {client} from '../utils/graphQLUtils';
 

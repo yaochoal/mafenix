@@ -52,9 +52,10 @@ export default class App extends React.Component {
 const MyApp = createDrawerNavigator({
 
   // For each screen that you can navigate to, create a new entry like this:
+  /*
   Inicio: {
     screen: Home,
-  },
+  },*/
   Materias: {
     screen: Courses
   },
@@ -66,7 +67,7 @@ const MyApp = createDrawerNavigator({
   },
   Contáctenos: {
     screen: Contacts
-  }},{initialRouteName: 'Inicio',
+  }},{initialRouteName: 'Materias',
   drawerPosition: 'left',
   contentComponent: CustomDrawerContentComponent,
   drawerOpenRoute: 'DrawerOpen',
