@@ -1,16 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
-import { Container, Icon, Header, Left } from 'native-base';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Picker} from 'react-native';
+import { DrawerNavigator, StackNavigator, DrawerItems, SafeAreaView } from 'react-navigation'
 
 export default class Home extends React.Component {
     render() {
         return (
-          <Container>
-            <View style={styles.container}>
-            <Text>Bienvenido al Home</Text>
-           </View>
-          </Container>
-          
+          <View style={styles.container}>
+          <Text>Bienvenido al Contactenos</Text>
+          </View>
           
         );
       }
