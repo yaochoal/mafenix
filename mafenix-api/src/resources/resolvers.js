@@ -1,10 +1,20 @@
-import { generalRequest, getRequest, generalRequest2} from '../utilities';
+import { generalRequest, getRequest} from '../utilities';
 import { url, port, entryPoint } from './server';
-
+const { createWriteStream } = require("fs");
 const URL = `http://${url}:${port}/${entryPoint}`;
+
+const storeUpload = ({ stream, filename }) =>
+  new Promise((resolve, reject) =>
+    stream
+      .pipe(createWriteStream(filename))
+      .on("finish", () => resolve())
+      .on("error", reject)
+  );
 
 const resolvers = {
 	Query: {
+		allResources1: (_) =>
+			getRequest(`${URL}1`, ''),
 		allResources: (_,{ page }) =>
 			getRequest(`${URL}?page=${page}`, ''),
 		resourceById: (_, { id }) =>
@@ -13,9 +23,11 @@ const resolvers = {
 			generalRequest(`http://${url}:${port}/search`,'POST',resource)
 	},
 	Mutation: {
-		uploadFile: async (_, { file }) => {
-      	const { stream, filename } = await file;
-      	console.log(file);
+		uploadFile: async (parent, { file }) => {
+      		const { stream, filename } = await file;
+      	//await generalRequest2(`${URL}`, 'POST', file)
+      	await storeUpload({ stream, filename });
+      	console.log(file)
       	return true;
     	},
 		createResource: (_, { resource }) =>

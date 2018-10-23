@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Title from '../Global/Title';
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
-
+import baseURL from "../../url";
 import axios from 'axios';
 //import { Mutation } from 'react-apollo';
 //import Dropzone from 'react-dropzone';
@@ -97,7 +97,7 @@ class Contenido extends Component {
 						 bodyFormData.append('file', this.state.file); 
 						  axios({
 							method: 'post',
-							url: 'http://192.168.99.101:4000/resources/',
+							url: `http://35.203.23.236:4000/resources`,
 							data: bodyFormData,
 							config: { headers: {'Content-Type': 'multipart/form-data' }}
 							})

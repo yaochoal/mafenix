@@ -7,11 +7,13 @@ import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 //Componentes
 import Comentario from './Comentario.js';
-
-
+import baseURL from "../../url"
 const client = new ApolloClient({
-	uri: "http://192.168.99.101:5500/graphql"
-  });
+  uri: `${baseURL}`
+});
+
+
+
 class Comentarios extends Component {
 	constructor(){
 		super()
@@ -85,7 +87,7 @@ class Comentarios extends Component {
 			  })
 			  .then(data => {
 				console.log(data.data.createComment)
-				setTimeout(function(){document.location.reload()},1);
+				setTimeout(function(){document.location.reload()},300);
 			  })
 			  .catch(error => console.error(error));
 		}
