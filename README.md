@@ -30,4 +30,9 @@ Iniciar migraciones de rails en la consola del microservicio resources-ms dar cl
 ``` $ cd mafenix-wa/ ```
 ``` $ npm install ```
 ``` $ npm start ```
+## Cuarta consola "Movil-front"
+``` $ cd mafenix-ma/ ```
+``` $ npm install ```
+``` $ expo start ```
+
 
