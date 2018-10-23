@@ -15,6 +15,7 @@ import Courses from './Courses';
 import Teachers from './Teachers';
 import Resources from './Resources';
 import Contacts from './Contacts';
+import Profile from './Profile';
 
 
 const CustomDrawerContentComponent = (props) => (
@@ -56,6 +57,10 @@ const MyApp = createDrawerNavigator({
   Inicio: {
     screen: Home,
   },*/
+
+  Perfil: {
+    screen: Profile
+  },
   Materias: {
     screen: Courses
   },
