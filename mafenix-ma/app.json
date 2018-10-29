@@ -1,8 +1,12 @@
 {
   "expo": {
-    "name": "my-new-project",
+    "name": "mafenix-ma",
+    "androidStatusBar": {
+      "backgroundColor": "#FFA500"
+   },
+   "primaryColor":"#FFA500",
     "description": "This project is really great.",
-    "slug": "my-new-project",
+    "slug": "mafenix-ma",
     "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],

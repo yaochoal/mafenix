@@ -21,7 +21,7 @@ export default class Resources extends React.Component {
   }
 
   makeRemoteRequest = () => {
-    if(this.state.page <= 5){
+    if(this.state.page <= 3){
     const { page } = this.state;
     this.setState({ loading: true });
       client.query({
@@ -52,7 +52,7 @@ export default class Resources extends React.Component {
 
 
   handleRefresh = () => {
-    if(this.state.page <= 5){
+    if(this.state.page <= 3){
     this.setState(
       {
         page: 1,
@@ -67,7 +67,7 @@ export default class Resources extends React.Component {
   };
 
   handleLoadMore = () => {
-    if(this.state.page <= 5){
+    if(this.state.page <= 3){
     this.setState(
       {
         page: this.state.page + 1
@@ -114,7 +114,6 @@ export default class Resources extends React.Component {
 
   render() {
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
@@ -135,7 +134,6 @@ export default class Resources extends React.Component {
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-      </List>
     );
   }
 }
