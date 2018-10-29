@@ -14,4 +14,4 @@ const reducer = (state,action) => {
     return state;
 };
 
-export default createStore(reducer, {id: "sinnada",username: "sinnadas",email: "",avatar: "",career_id: "",aut: false});
+export default createStore(reducer, {id: "Id por defecto",username: "Nombre por Defecto",email: "correo@pordefecto.com",avatar: "https://robohash.org/quasiquianihil.png?size=300x300&set=set1",career_id: "",aut: false});
