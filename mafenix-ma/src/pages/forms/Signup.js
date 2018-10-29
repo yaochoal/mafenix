@@ -3,29 +3,28 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar ,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
-
-import Logo from '../components/Logo';
-import FormLogin from '../components/FormLogin';
+import FormSign from './FormSign';
 
 import {Actions} from 'react-native-router-flux';
 
-export default class Login extends Component {
-    
-	signup() {
-		Actions.signup()
-	}
+export default class Signup extends Component{
+
+  goBack() {
+      Actions.pop();
+  }
 
 	render() {
 		return(
 			<View style={styles.container}>
-				<Logo/>
-				<FormLogin type="Ingresar"/>
+				<Image  style={{width:"100%", flex:1}}
+          			source={require('../../img/logo.png')}/>
+				<FormSign type="Registrarse"/>
 				<View style={styles.signupTextCont}>
-					<Text style={styles.signupText}>Aún no tienes una cuenta?</Text>
-					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Registrarse</Text></TouchableOpacity>
+					<Text style={styles.signupText}>¿Ya tienes una cuenta?</Text>
+					<TouchableOpacity onPress={this.goBack}><Text style={{color:'orange'}}> Iniciar sesión</Text></TouchableOpacity>
 				</View>
 			</View>	
 			)
@@ -34,7 +33,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   container : {
-    backgroundColor:'#296D8F',
+    backgroundColor:'white',
     flex: 1,
     alignItems:'center',
     justifyContent :'center'
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   signupText: {
-  	color:'rgba(255,255,255,0.6)',
+  	color:'grey',
   	fontSize:16
   },
   signupButton: {
