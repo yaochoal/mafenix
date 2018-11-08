@@ -13,7 +13,12 @@ export default class App extends React.Component {
   async componentWillMount() {
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
-      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("native-base/Fonts/Ionicons.ttf"),
+      Entypo: require("native-base/Fonts/Entypo.ttf"),
+      Foundation: require("native-base/Fonts/Foundation.ttf"),
+      MaterialCommunityIcons: require("native-base/Fonts/MaterialCommunityIcons.ttf"),
+      MaterialIcons: require("native-base/Fonts/MaterialIcons.ttf")
     });
     this.setState({ loading: false });
   }
