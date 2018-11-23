@@ -1,13 +1,12 @@
 package main
 
+//go get gopkg.in/ldap.v2
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
-
-	"gopkg.in/mgo.v2/bson"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/context"
@@ -17,6 +16,8 @@ import (
 	. "github.com/yaochoal/users-restapi/config"
 	. "github.com/yaochoal/users-restapi/dao"
 	. "github.com/yaochoal/users-restapi/models"
+	ldap "gopkg.in/ldap.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var config = Config{}
@@ -143,28 +144,43 @@ func CreateTokenEndpoint(w http.ResponseWriter, r *http.Request) {
 	user, error := dao.FindByEmail(data.Email)
 	//log.Println("encontro= " + user.Email)
 	//log.Println("encontro= " + user.Name)
-	if user.Email == "" || user.Password != data.Password {
-		log.Println("Email " + data.Email + " no existe")
-		if error != nil {
-			fmt.Println(error)
-		}
-		respondWithJson(w, http.StatusUnauthorized, map[string]string{"result": "not authorized"})
+	l, err := ldap.Dial("tcp", fmt.Sprintf("%s:%d", "mafenix-ldap", 389))
+	if err != nil {
+		log.Println(err)
 	} else {
+		log.Println("Conectado a servidor ldap...")
+	}
 
-		var caracoles string = user.ID.Hex()
-		log.Println(caracoles)
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"name":   user.Name,
-			"email":  user.Email,
-			"avatar": user.Avatar,
-			"id":     caracoles,
-		})
-		tokenString, error := token.SignedString([]byte("secret"))
-		if error != nil {
-			fmt.Println(error)
+	defer l.Close()
+	err = l.Bind("cn="+data.Email+",ou=mafenix,dc=mafenix", data.Password)
+	if err != nil {
+		log.Println(err)
+		respondWithJson(w, http.StatusUnauthorized, map[string]string{"resultado": "no autorizado en la ldap-bd"})
+	} else {
+		log.Println("Usuario autenticado en ldap...")
+		if user.Email == "" || user.Password != data.Password {
+			log.Println("Email " + data.Email + " no existe")
+			if error != nil {
+				fmt.Println(error)
+			}
+			respondWithJson(w, http.StatusUnauthorized, map[string]string{"resultado": "no autorizado en la ms-bd"})
+		} else {
+
+			var caracoles string = user.ID.Hex()
+			log.Println(caracoles)
+			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+				"name":   user.Name,
+				"email":  user.Email,
+				"avatar": user.Avatar,
+				"id":     caracoles,
+			})
+			tokenString, error := token.SignedString([]byte("secret"))
+			if error != nil {
+				fmt.Println(error)
+			}
+			respondWithJson(w, http.StatusCreated, JwtToken{Token: tokenString})
+
 		}
-		respondWithJson(w, http.StatusCreated, JwtToken{Token: tokenString})
-
 	}
 
 }

@@ -5,9 +5,11 @@ import store from '../../store';
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 
+import baseURL from "../../url"
 const client = new ApolloClient({
-  uri: "http://192.168.99.101:5500/graphql"
+  uri: `${baseURL}`
 });
+
 
 //Assets
 
@@ -68,7 +70,7 @@ class Grafico extends Component {
 		  })
 		  .then(data => {
       //console.log(data.data.createScoreResource)
-      setTimeout(function(){document.location.reload()},1);
+      setTimeout(function(){document.location.reload()},500);
 		  })
 		  .catch(error => console.error(error));
   }

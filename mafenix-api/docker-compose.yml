@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  academy-api:
+  mafenix-api:
     build: .
     environment:
       PORT: '5500'

@@ -18,6 +18,7 @@ input ResourceSearch {
 
 export const resourcesQueries = `
     allResources(page: Int!): [Resource]!
+    allResources1: [Resource]!
     resourceById(id: Int!): Resource!
     resourceByName(resource: ResourceSearch!): [Resource]!
 `;
