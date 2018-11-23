@@ -10,6 +10,8 @@ import Login from '../Login';
 import Register from '../Login/Registerform';
 import Page404 from '../Page404';
 import store from '../../store';
+
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
 
   <Route {...rest} render={(props) => (
@@ -22,7 +24,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 const Content = () => (
 
   <content>
+    
     <Switch>
+      
       <Route exact path="/" component={Inicio} /> 
       <Route  path="/materias" component={Materias}/>
       <Route  path="/docentes" component={Docentes}/>

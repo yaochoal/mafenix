@@ -1,8 +1,8 @@
 import merge from 'lodash.merge';
 import GraphQLJSON from 'graphql-type-json';
-import { makeExecutableSchema } from 'graphql-tools';
-
+import { makeExecutableSchema} from 'graphql-tools';
 import { mergeSchemas } from './utilities';
+import { GraphQLUpload} from 'apollo-server'
 
 import {
 	coursesMutations,
@@ -29,10 +29,10 @@ import {
 } from './comments/typeDefs';
 
 import {
-	scorecommentsMutations,
-	scorecommentsQueries,
-	scorecommentsTypeDef
-} from './scorecomments/typeDefs';
+	scoreresourcesMutations,
+	scoreresourcesQueries,
+	scoreresourcesTypeDef
+} from './scoreresources/typeDefs';
 
 import {
 	contactsMutations,
@@ -51,7 +51,7 @@ import coursesResolvers from './courses/resolvers';
 import teachersResolvers from './teachers/resolvers';
 import resourcesResolvers from './resources/resolvers';
 import commentsResolvers from './comments/resolvers';
-import scorecommentsResolvers from './scorecomments/resolvers';
+import scoreresourcesResolvers from './scoreresources/resolvers';
 import contactsResolvers from './contacts/resolvers';
 import usersResolvers from './users/resolvers';
 
@@ -59,11 +59,12 @@ import usersResolvers from './users/resolvers';
 const mergedTypeDefs = mergeSchemas(
 	[
 		'scalar JSON',
+		'scalar Upload',
 		coursesTypeDef,
 		teachersTypeDef,
 		resourcesTypeDef,
 		commentsTypeDef,
-		scorecommentsTypeDef,
+		scoreresourcesTypeDef,
 		contactsTypeDef,
 		usersTypeDef,
 	],
@@ -72,7 +73,7 @@ const mergedTypeDefs = mergeSchemas(
 		teachersQueries,
 		resourcesQueries,
 		commentsQueries,
-		scorecommentsQueries,
+		scoreresourcesQueries,
 		contactsQueries,
 		usersQueries,
 	],
@@ -81,7 +82,7 @@ const mergedTypeDefs = mergeSchemas(
 		teachersMutations,
 		resourcesMutations,
 		commentsMutations,
-		scorecommentsMutations,
+		scoreresourcesMutations,
 		contactsMutations,
 		usersMutations,
 	]
@@ -93,12 +94,14 @@ export default makeExecutableSchema({
 	typeDefs: mergedTypeDefs,
 	resolvers: merge(
 		{ JSON: GraphQLJSON }, // allows scalar JSON
+		{ Upload: GraphQLUpload} ,
 		coursesResolvers,
 		teachersResolvers,
 		resourcesResolvers,
 		commentsResolvers,
-		scorecommentsResolvers,
+		scoreresourcesResolvers,
 		contactsResolvers,
 		usersResolvers,
 	)
+
 });

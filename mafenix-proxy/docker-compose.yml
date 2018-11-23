@@ -1,0 +1,6 @@
+version: "2.1"
+services:
+   mafenix-proxy:
+        build: .
+        ports:
+          - "80:80"

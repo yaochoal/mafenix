@@ -27,6 +27,7 @@ input TeacherSearch {
 
 export const teachersQueries = `
     allTeachers(page: Int!): [Teacher]!
+    allTeachers1: [Teacher]!
     teacherById(id: Int!): Teacher!
     teacherByName(teacher: TeacherSearch!): [Teacher]!
 `;

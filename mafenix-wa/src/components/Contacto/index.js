@@ -1,9 +1,19 @@
 // Dependencies
 import React, { Component } from 'react';
 import Title from '../Global/Title';
-import baseURL from '../../url';
 import swal from 'sweetalert2';
 import { logPageView } from '../../analytics';
+//graphql
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+
+import baseURL from "../../url"
+const client = new ApolloClient({
+  uri: `${baseURL}`
+});
+
+
+
 class Contacto extends Component {
     constructor(props){
         super(props);
@@ -30,8 +40,6 @@ class Contacto extends Component {
     }
 
     handleInput(e){
-
-
         this.setState({
             [e.target.name]:e.target.value
         });
@@ -49,7 +57,7 @@ class Contacto extends Component {
             this.setState({nombreErr: ''});
         }
         if ((this.state.apellido.length <3 && this.state.apellido.length!==0) || ((this.state.apellido === "")&&(e.target.name ==='apellido'))){
-            console.log(this.state.apellido.length);
+            //console.log(this.state.apellido.length);
             this.setState({apellidoErr: 'No es apellido valido'});
         }
 
@@ -80,7 +88,7 @@ class Contacto extends Component {
 
     onSubmit(e){
 
-        console.log(this.state);
+        //console.log(this.state);
         e.preventDefault();
         if((this.state.nombreErr !=="")||(this.state.apellidoErr !== "") ||(this.state.asuntoErr !== "") ||(this.state.correoErr !== "") ){
            swal("Digite los campos señalados",'','error'); 
@@ -103,21 +111,22 @@ class Contacto extends Component {
 
         });
 
-      const contactParams = {"name": this.state.nombre, "lastname": this.state.apellido,
-      "email": this.state.correo, "subject": this.state.asunto, "message": this.state.mensaje}
-      const body = JSON.stringify(contactParams)
-      return fetch(`${baseURL}/contacts`, {
-      method: 'post',
-      body: body,
-      headers: {
-        "Content-Type":"application/json",
-        "Accept":"application/json"
-      }
+      client.mutate({
+        mutation: gql`
+        mutation{
+            createContact(contact:{
+              name :"${this.state.nombre}"
+              lastName:"${this.state.apellido}"
+              message:"${this.state.mensaje}"
+              email: "${this.state.correo}"
+            })
+          }`
       })
-      .then((res) => {
-        return res.json()
-      })   
-    };
+      .then(data => {
+        //console.log(data)
+      })
+      .catch(error => console.error(error));
+    }
 
 
   render() {

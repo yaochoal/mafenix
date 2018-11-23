@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  academy-api:
+  mafenix-api:
     build: .
     environment:
       PORT: '5500'
@@ -17,9 +17,9 @@ services:
       COMMENTS_URL: '192.168.99.101'
       COMMENTS_PORT: '8000'
       COMMENTS_ENTRY: 'comments'
-      SCORECOMMENTS_URL: '192.168.99.101'
-      SCORECOMMENTS_PORT: '5000'
-      SCORECOMMENTS_ENTRY: 'scoreservice'
+      SCORERESOURCES_URL: '192.168.99.101'
+      SCORERESOURCES_PORT: '5000'
+      SCORERESOURCES_ENTRY: 'scoreservice'
       CONTACTS_URL: '192.168.99.101'
       CONTACTS_PORT: '6000'
       CONTACTS_ENTRY: 'contacts-ms/resources/contact'

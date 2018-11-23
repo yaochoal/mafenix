@@ -5,11 +5,19 @@
 //https://apps.twitter.com/
 //https://console.firebase.google.com/project/mafe-app/overview
 import React, { Component } from 'react';
-import { loginUser } from './loginUser';
-import { obtenerDatos, pPost } from './obtenerDatos';
+//import { pPost } from './obtenerDatos';
 import firebase from 'firebase'
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
+
+//graphiql
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+import baseURL from "../../url"
+const client = new ApolloClient({
+  uri: `${baseURL}`
+});
+
 class Loginform extends Component {
 constructor() {
     super();
@@ -17,14 +25,7 @@ constructor() {
     logPageView();
   }
 
-  componentWillMount(){
-    //obtener datos del token jwt en el link users
-    if (localStorage.getItem('jwtToken')) {
-      obtenerDatos(localStorage.getItem('jwtToken'),'users').then((users) => {
-        this.setState({ s_users: users })
-      })
-    }
-  }
+ 
   
  setField (e) {
   if(e.target.id === 'email'){
@@ -42,36 +43,45 @@ constructor() {
 
 handleSubmit = (e) =>{
      e.preventDefault()
-      const loginParams = {"auth": {"email": this.state.email, "password": this.state.password}}
-      loginUser(loginParams).then((token) => {
-      localStorage.setItem("jwtToken", token.jwt)
-    }).then(  this.setState({error: null}) ).catch((error) => {
-      this.setState({error: "Email o contraseña incorrecta"})
-    });
-    if(this.state.error === null){
-    setTimeout(function(){document.location.reload()},1000);
-    swal({
-      title:'Cargando...',
-      text:'',
-      timer:1000,
-      onOpen: () =>{
-        swal.showLoading()
+     this.setState({error: null});
+     client.query({
+      query: gql`
+      query{
+        userToken(user:{
+          email:"${this.state.email}"
+          password:"${this.state.password}"
+        }){
+          token
+        }
       }
+      `
     })
-    }
-    
+    .then(data => {
+      console.log(data.data.userToken.token)
+      localStorage.setItem("jwtToken", data.data.userToken.token)
+      if(this.state.error === null){
+        setTimeout(function(){document.location.reload()},1000);
+        swal({
+          title:'Cargando...',
+          text:'',
+          timer:1000,
+          onOpen: () =>{
+            swal.showLoading()
+          }
+        })
+        }
+    })
+    .catch(error => {console.error(error)
+      this.setState({error: "Email o contraseña incorrecta"})});
   }
 
   googleResponse = (response) => {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
-     const loginParams = {"name": result.additionalUserInfo.profile.name,"email": result.additionalUserInfo.profile.email,
-     "avatar": result.additionalUserInfo.profile.picture }
-      pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
+     
+    console.log(result.additionalUserInfo.profile);
      // console.log(token.jwt);
-     localStorage.setItem("jwtToken", token.jwt)
+      /*
       setTimeout(function(){document.location.reload()},1000);
       swal({
       title:'Cargando...',
@@ -79,8 +89,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
+        */
    
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
@@ -105,14 +114,9 @@ handleSubmit = (e) =>{
  twitterResponse = (response) => {
  var provider = new firebase.auth.TwitterAuthProvider();
  firebase.auth().signInWithPopup(provider).then(function(result) {
-  const loginParams = {"name": result.additionalUserInfo.profile.name,"email": `${result.additionalUserInfo.profile.screen_name}@correo.com`,
-     "avatar": result.additionalUserInfo.profile.profile_image_url }
-     
-     pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
+  console.log(result);
      // console.log(token.jwt);
-     localStorage.setItem("jwtToken", token.jwt)
+      /*
       setTimeout(function(){document.location.reload()},1000);
       swal({
       title:'Cargando...',
@@ -120,9 +124,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
-   
+        */
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
     }
@@ -145,12 +147,8 @@ handleSubmit = (e) =>{
  facebookResponse = (response) => {
   var provider = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(result) {
- const loginParams = {"name": result.additionalUserInfo.profile.name,"email": result.additionalUserInfo.profile.email,
-     "avatar": result.additionalUserInfo.profile.picture.data.url }
-      pPost(loginParams,"socials").then((token) => {
-    console.log(token);
-    
-     // console.log(token.jwt);
+    console.log(result.additionalUserInfo.profile);
+     /*
      localStorage.setItem("jwtToken", token.jwt)
       setTimeout(function(){document.location.reload()},1000);
       swal({
@@ -159,9 +157,7 @@ handleSubmit = (e) =>{
       timer:1000,
       onOpen: () =>{
         swal.showLoading()}  })   })
-   
-
-   
+   */
     if(this.state.error === null){
    // setTimeout(function(){document.location.reload()},1000);
     }

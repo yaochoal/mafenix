@@ -40,6 +40,7 @@ input CourseSearch {
 
 export const coursesQueries = `
     allCourses(page: Int!): [Course]!
+    allCourses1: [Course]!
     courseById(id: Int!): Course!
     courseByName(course: CourseSearch!): [Course]!
 `;

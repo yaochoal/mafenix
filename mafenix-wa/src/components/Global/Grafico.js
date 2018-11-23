@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import { Polar} from 'react-chartjs-2';
 import store from '../../store';
-import swal from 'sweetalert2';
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
 
+import baseURL from "../../url"
 const client = new ApolloClient({
-  uri: "http://192.168.99.101:5500/graphql"
+  uri: `${baseURL}`
 });
+
 
 //Assets
 
@@ -26,7 +27,7 @@ class Grafico extends Component {
     client.query({
 			query: gql`
       query{
-        scorecommentByService(scorecomment:{
+        scoreresourceByService(scoreresource:{
           service: "${this.props.recurso}"
           service_id: ${this.props.post_id}
         }){
@@ -40,62 +41,38 @@ class Grafico extends Component {
 		  })
 		  .then(data => {
 			//console.log(data.data.courseById)
-			this.setState({ data: data.data.scorecommentByService})
+			this.setState({ data: data.data.scoreresourceByService})
 		  })
 		  .catch(error => console.error(error));
   }
+
  cambiarEstado=(e)=>{  
       this.setState({value: e.target.value});
   }
+
   calificar=(e)=>{
-    /*
-  		let axiosConfig = {headers: {'Content-Type': 'application/json;'}};
-          axios.post(`${baseURL}/scores`, {
-         [this.props.type]: this.props.data.id,
-         positive: this.state.value,
-         user_id: store.getState().id
-      	 }, axiosConfig)
-       	.then(function (response) {
-      	 //  this.setState({response});
-      	 swal("Su calificacion ha sido completada",'','success');
-         console.log(response)
-      	  //setTimeout(function(){document.location.reload()},1000);
-        })
-        .catch(function (error) {
-          swal("Ya ha hecho una calificación",'','error');
-        console.log(error);
-       });
-         fetch(`${baseURL}/${this.props.valor}/${this.props.post_id}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-       if(this.props.valor === "resources"){
-       this.setState({ data: data})
-       }
-       if(this.props.valor === "teachers"){
-       this.setState({ data: data})
-       }
-       if(this.props.valor ===  "courses"){
-       this.setState({ data: data})
-       }
-      })
-       fetch(`${baseURL}/${this.props.valor}/${this.props.post_id}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-       if(this.props.valor === "resources"){
-       this.setState({ data: data})
-       }
-       if(this.props.valor === "teachers"){
-       this.setState({ data: data})
-       }
-       if(this.props.valor ===  "courses"){
-       this.setState({ data: data})
-       }
-      })
-      */
+
+    client.mutate({
+			mutation: gql`
+      mutation{
+        createScoreResource(scoreresource:{
+          score: ${this.state.value}
+          service:"${this.props.recurso}"
+          service_id:${this.props.post_id}
+          user_id: "${store.getState().id}"
+        }){
+          score
+          service
+          service_id
+          user_id
+        }
+      }`
+		  })
+		  .then(data => {
+      //console.log(data.data.createScoreResource)
+      setTimeout(function(){document.location.reload()},500);
+		  })
+		  .catch(error => console.error(error));
   }
 	render(){
 

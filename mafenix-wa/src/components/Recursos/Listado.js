@@ -6,13 +6,15 @@ import Title from '../Global/Title';
 import Busqueda from '../Global/Busqueda.js';
 import Contenido from './Contenido.js';
 import { Link } from "react-router-dom";
-
-
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
+
+import baseURL from "../../url"
 const client = new ApolloClient({
-  uri: "http://192.168.99.101:5500/graphql"
+  uri: `${baseURL}`
 });
+
+
 class Listado extends Component {
 	constructor() {
 		super()
