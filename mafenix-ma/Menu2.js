@@ -11,11 +11,11 @@ export default class Routes extends Component {
 		return(
 			<Router>
 			    <Stack key="root" hideNavBar={true}>
-                    <Scene key="Menu" component={Menu} title="Menu" />
+                    <Scene key="Menu" component={Menu} title="Menu" initial={true}/>
                     <Scene key="Course" component={Course} title="Curso" />
                     <Scene key="Teacher" component={Teacher} title="Docente"/>
                     <Scene key="signup" component={Signup} title="Registro"/>
-                    <Scene key="login" component={Login} title="Inicio de sesion" initial={true} />
+                    <Scene key="login" component={Login} title="Inicio de sesion"  />
                     <Scene key="profile" component={Profile} title="Profile"/>
 			    </Stack>
 			 </Router>
