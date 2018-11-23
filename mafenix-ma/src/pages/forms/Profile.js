@@ -9,7 +9,7 @@ export default class Profile extends React.Component {
           <Thumbnail large source={{uri:`${store.getState().avatar}`}} />
           <Text>Bienvenido {store.getState().username}</Text>
           <Text>Correo: {store.getState().email}</Text>
-          <Text>Correo: {store.getState().id}</Text>
+          <Text>Id de usuario: {store.getState().id}</Text>
           </View>
         );
       }

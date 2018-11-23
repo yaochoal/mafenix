@@ -8,8 +8,7 @@ services:
   #microservicio de comentarios
   comments-ms:
     container_name: comments-ms
-    image: comments-ms
-    build: ./comments-ms
+    image: yaochoal/comments-ms
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - ./code
@@ -18,8 +17,7 @@ services:
   #microservicio de contactenos
   contacts-ms:
     container_name: contacts-ms
-    image: contacts-ms
-    build: ./contacts-ms
+    image: yaochoal/contacts-ms
     depends_on:
       - contacts-db
   #base de datos de contactenos
@@ -40,8 +38,7 @@ services:
   #microservicio de recursos
   resources-ms:
     container_name: resources-ms
-    image: resources-ms
-    build: ./resources-ms
+    image: yaochoal/resources-ms
     command: bundle exec rails s -p 4000 -b '0.0.0.0'
     volumes:
       - ./myapp
@@ -50,8 +47,7 @@ services:
   #microservicio de calificaciones
   scoreresources-ms:
     container_name: scoreresources-ms
-    image: scoreresources-ms
-    build: ./scoreresources-ms
+    image: yaochoal/scoreresources-ms
     depends_on:
       - scoreresources-db
   #base de datos de calificaciones
@@ -63,8 +59,7 @@ services:
   #microservicio de usuarios
   users-ms:
     container_name: users-ms
-    image: users-ms
-    build: ./users-ms/users-restapi
+    image: yaochoal/users-ms
     depends_on:
       - users-db
   #base de datos de usuarios
@@ -78,8 +73,7 @@ services:
   #api gateway para graphql
   mafenix-api:
     container_name: mafenix-api
-    image: mafenix-api
-    build: ./mafenix-api
+    image: yaochoal/mafenix-api
     environment:
       PORT: '5500'
       SHOW_URLS: 'true'
@@ -160,8 +154,7 @@ services:
   #Proxy inverso Ngnix
   mafenix-proxy:
     container_name: mafenix-proxy
-    image: mafenix-proxy
-    build: ./mafenix-proxy
+    image: yaochoal/mafenix-proxy
     ports:
       - "80:80"
 

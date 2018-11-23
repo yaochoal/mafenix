@@ -277,6 +277,7 @@ export class Course extends React.Component {
       this.setState({ loading: false });
   }
   
+  
   render() {
     if (this.state.loading) {
       return (
@@ -295,7 +296,9 @@ export class Course extends React.Component {
             </Button>
           </Left>
           <Body>
+         
             <Title>Materia</Title>
+           
           </Body>
           <Right />
         </Header>

@@ -13,6 +13,8 @@ const storeUpload = ({ stream, filename }) =>
 
 const resolvers = {
 	Query: {
+		allResources1: (_) =>
+			getRequest(`${URL}1`, ''),
 		allResources: (_,{ page }) =>
 			getRequest(`${URL}?page=${page}`, ''),
 		resourceById: (_, { id }) =>
