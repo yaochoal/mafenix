@@ -13,8 +13,9 @@ import { initGA } from '../analytics';
 //graphiql
 import ApolloClient from 'apollo-boost';
 import gql from "graphql-tag";
+import baseURL from "../url"
 const client = new ApolloClient({
-  uri: "http://192.168.99.101:5500/graphql"
+  uri: `${baseURL}`
 });
 
 

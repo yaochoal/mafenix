@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import { enviarDatos } from './enviarDatos';
 import swal from 'sweetalert2'
 import Title from '../Global/Title';
 import { logPageView } from '../../analytics';
+//graphiql
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
+import baseURL from "../../url"
+const client = new ApolloClient({
+  uri: `${baseURL}`
+});
+
 class Registerform extends Component {
 constructor(props) {
     super(props);
@@ -32,22 +39,7 @@ constructor(props) {
     }
   }
 
- 
-    componentWillMount(){
-        fetch('https://mafe-app-back.herokuapp.com/contacts')
-        .then(res => res.json())
-        .then(res => 
-            this.setState({
-                todos: res
-
-            })
-        );
-        
-    }
-    
-
   validar(e){
-
     if ((this.state.name.length <3 && this.state.name.length!==0)|| ((this.state.name === "u")&&(e.target.id ==='name'))){
             this.setState({nameErr: 'No es nombre valido'});
         }
@@ -71,83 +63,60 @@ constructor(props) {
   vali(e){
       const todoList = []
         this.state.todos.map((todo,index) =>
-
                     todoList.push(String(todo.name))
-
-            )
-            
+            )  
         const usercom = []
         this.state.todos.map((todo,index) =>
-
                     usercom.push(String(todo.email))
-
             )
-
         if(e.target.id ==='name'){
         var j
         for(j=0; j<todoList.length;j++){
-
-          
             if (todoList[j]===e.target.value){
               this.setState({validacionbackuser:'El nombre de usuario ya está en uso'})
             }
-            
         }
-
         }if(e.target.id ==='email1'){
           var i
         for(i=0; i<usercom.length;i++){
-
             if (usercom[i]===e.target.value){
               this.setState({validacionbackemail:'El Email ya está en uso'})
-            }
-            
+            }   
         }
-
         }
-
-        
-
     }
-
-
-
 
   handleSubmit = (e) =>{
-    const loginParams = {
-    "username": this.state.name,
-    "email": this.state.email,
-    "password": this.state.password, 
-    "password_confirmation":  this.state.password,
-    "avatar": "https://robohash.org/quasiquianihil.png?size=300x300&set=set1"
-    }
+    e.preventDefault()
    if((this.state.nameErr !=="")||(this.state.emailErr !== "") ||(this.state.passErr !== "") ||(this.state.validacionbackuser !== "") || (this.state.validacionbackemail !== "") || (this.state.name === "") || (this.state.email === "") || (this.state.password === "")){
            swal("Digite los campos señalados",'','error'); 
     }else{
-            swal("Se ha registrado exitosamente",'','success');
-            enviarDatos(loginParams).then((token) => {
-      //localStorage.setItem("jwtToken", token.jwt)
-    }).then(  this.setState({registrado: 1}) ).catch((error) => {
-     // this.setState({error: "Email o contraseña incorrecta"})
-    });
+     client.mutate({
+      mutation: gql`
+      mutation{
+        createUser(user:{
+          name:"${this.state.name}"
+          password:"${this.state.password}"
+          email:"${this.state.email}"
+          avatar:"https://robohash.org/quasiquianihil.png?size=300x300&set=set1"
+        }){
+          name
         }
-    
+      }`
+    })
+    .then(data => {
+      console.log(data.data);
+      this.setState({registrado: 1});
+      swal("Se ha registrado exitosamente",'','success');
+    })
+    .catch(error => {console.error(error)});
+    }
 
   }
+
+
   render() {
-    //console.log(this.state.todos)
-    
-    
-       // console.log(usercom)
-        
-        
-    
-        
-
-    
     if(this.state.registrado === 1){
-     
-
       return(<div>
         <Title title='Sign up'/>
         <div className="register-area" style={{backgroundColor: 'rgb(249, 249, 249)'}}>
@@ -174,10 +143,8 @@ constructor(props) {
      return(
 
 <div><Title title='Sign up'/>
-        <div className="register-area" style={{backgroundColor: 'rgb(249, 249, 249)'}}>
-        
+        <div className="register-area" style={{backgroundColor: 'rgb(249, 249, 249)'}}>   
         <div className="container">
-
           <div className="col-md-6">
        <div className="box-for overflow">
         <div className="col-md-12 col-xs-12 register-blocks">

@@ -4,4 +4,4 @@ RUN mkdir /myapp
 WORKDIR /myapp
 COPY /myapp /myapp
 RUN bundle install
-
+EXPOSE 4000
