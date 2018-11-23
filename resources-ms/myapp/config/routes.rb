@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   resources :resources1
   resources :teachers1
   resources :courses1
+  wash_out :wsresources
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
