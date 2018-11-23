@@ -5,6 +5,8 @@ const URL = `http://${url}:${port}/${entryPoint}`;
 
 const resolvers = {
 	Query: {
+		allTeachers1: (_) =>
+			getRequest(`${URL}1`, ''),
 		allTeachers: (_,{ page }) =>
 			getRequest(`${URL}?page=${page}`, ''),
 		teacherById: (_, { id }) =>
