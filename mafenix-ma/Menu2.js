@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Router, Stack, Scene} from 'react-native-router-flux';
 import {Course} from './src/pages/Courses';
 import {Teacher} from './src/pages/Teachers';
+import {Resource} from './src/pages/Resources';
 import Menu from './src/pages/Menu';
 import Signup from './src/pages/forms/Signup';
 import Login from './src/pages/forms/Login';
@@ -14,8 +15,9 @@ export default class Routes extends Component {
                     <Scene key="Menu" component={Menu} title="Menu" initial={true}/>
                     <Scene key="Course" component={Course} title="Curso" />
                     <Scene key="Teacher" component={Teacher} title="Docente"/>
+                    <Scene key="Resource" component={Resource} title="Recurso"/>
                     <Scene key="signup" component={Signup} title="Registro"/>
-                    <Scene key="login" component={Login} title="Inicio de sesion"  />
+                    <Scene key="login" component={Login} title="Inicio de sesion" initial={true} />
                     <Scene key="profile" component={Profile} title="Profile"/>
 			    </Stack>
 			 </Router>

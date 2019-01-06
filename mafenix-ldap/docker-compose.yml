@@ -7,7 +7,7 @@
           PORT: '389'
           LDAP_LOG_LEVEL: "256"
           LDAP_ORGANISATION: "Software Architecture"
-          LDAP_DOMAIN: "arqsoft.unal.edu.co"
+          LDAP_DOMAIN: "mafenix"
           LDAP_BASE_DN: ""
           LDAP_ADMIN_PASSWORD: "admin"
           LDAP_CONFIG_PASSWORD: "config"

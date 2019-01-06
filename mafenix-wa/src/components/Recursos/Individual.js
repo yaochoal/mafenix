@@ -152,16 +152,19 @@ constructor() {
 						<div className="clearfix padding-top-40">
 							<div className="col-md-8 single-property-content ">
 								<div className="single-property-wrapper">
-									
+								
 									<div className="single-property-header">
 									<Grafico recurso="resources" post_id={this.props.match.params.id}/>
 										 <a href={this.state.data_a.link}><h3><b>Visualizar documento:</b></h3></a>
-
+										 <object width="100%" height="600" data={this.state.data_a.link} type="application/pdf">
+														<embed src={this.state.data_a.link}  type="application/pdf" />
+													</object>
 										<div className="section">
 											<section id="comments" className="comments wow fadeInRight animated"> 
 												<h6 className="text wow fadeInLeft animated"><a>Description</a></h6>
 												<div className="s-property-content">
 													<p>{this.state.data_a.description}</p>
+													
 													{/*
 												 <Document file={this.state.data_a.link} onLoadSuccess={this.onDocumentLoad}>
 													 <Page pageNumber={pageNumber} />
@@ -177,6 +180,7 @@ constructor() {
 									</div>
 								</div>
 							</div>
+							{/*
 							<div className="col-md-4 p0">
 								<aside className="sidebar sidebar-property blog-asside-right">
 									<div className="dealer-widget">
@@ -205,7 +209,7 @@ constructor() {
 										</div>
 									</div>
 								</aside>
-							</div>
+							</div>*/}
 							<div className="col-md-4 p0">
 								<aside className="sidebar sidebar-property blog-asside-right">
 									<div className="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
@@ -236,16 +240,18 @@ constructor() {
 						<div className="clearfix padding-top-40">
 							<div className="col-md-8 single-property-content ">
 								<div className="single-property-wrapper">
-									
 									<div className="single-property-header">
 									<Grafico recurso="resources" post_id={this.props.match.params.id}/>
 										 <a href={this.state.data_a.link}><h3><b>Visualizar documento:</b></h3></a>
-										   
+										 <object width="100%" height="600" data={this.state.data_a.link} type="application/pdf">
+														<embed src={this.state.data_a.link}  type="application/pdf" />
+													</object>
 										<div className="section">
 											<section id="comments" className="comments wow fadeInRight animated"> 
 												<h6 className="text wow fadeInLeft animated"><a>Description</a></h6>
 												<div className="s-property-content">
 													<p>{this.state.data_a.description}</p>
+												
 													{/*
 												 <Document file={this.state.data_a.link} onLoadSuccess={this.onDocumentLoad}>
 													 <Page pageNumber={pageNumber} />

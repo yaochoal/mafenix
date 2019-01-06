@@ -215,24 +215,7 @@ signOut = (response) => {
                 
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="box-for overflow">                         
-              <div className="col-md-12 col-xs-12 login-blocks">
-                <h2>Iniciar sesión con redes sociales: </h2> 
-                <br></br>
-                <div className="social pull-left"> 
-                <p>
-                  <a className="login-social" onClick={this.facebookResponse}><i className="fa fa-facebook"></i>&nbsp;Facebook</a> &nbsp; 
-
-                  <a className="login-social" onClick={this.googleResponse}><i className="fa fa-google-plus"></i>&nbsp;Gmail</a>  &nbsp;
-                  <a className="login-social"  onClick={this.twitterResponse}><i className="fa fa-twitter"></i>&nbsp;Twitter</a>   
-                </p>
-               </div>
-                
-              </div>
-                
-            </div>
-          </div>
+     
           </div>
       )
     }
