@@ -6,7 +6,6 @@ import Title from '../Global/Title';
 import Comentarios from '../Global/Comentarios.js';
 import ListaMaterias from './ListaMaterias.js';
 import ListaDocentes from './ListaDocentes.js';
-import FileBase64 from 'react-file-base64';
 import axios from 'axios';
 import store from '../../store';
 import Grafico from '../Global/Grafico';

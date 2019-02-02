@@ -97,7 +97,7 @@ class Contenido extends Component {
 						 bodyFormData.append('file', this.state.file); 
 						  axios({
 							method: 'post',
-							url: `http://35.203.92.213:4000/resources`,
+							url: `http://192.168.99.101:4000/resources`,
 							data: bodyFormData,
 							config: { headers: {'Content-Type': 'multipart/form-data' }}
 							})

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import firebase from 'firebase'
+
 
 class Footer extends Component {
 	constructor(){
@@ -13,12 +13,7 @@ class Footer extends Component {
 		}
 	}
 	componentWillMount(){
-	 const nameRef = firebase.database().ref().child('object').child('name')
-	 nameRef.on('value', snapshot => {
-		this.setState({
-		name: snapshot.val()
-	 })
-	})
+	
 
 	}
 	static propTypes = {
