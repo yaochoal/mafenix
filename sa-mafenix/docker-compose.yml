@@ -1,0 +1,174 @@
+version: '2'
+#todos los microservicios
+services:
+  #base de datos de comentarios
+  comments-db:
+    container_name: comments-db
+    image: postgres
+  #microservicio de comentarios
+  comments-ms:
+    container_name: comments-ms
+    image: yaochoal/comments-ms
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./code
+    depends_on:
+      - comments-db
+  #microservicio de contactenos
+  contacts-ms:
+    container_name: contacts-ms
+    image: yaochoal/contacts-ms
+    depends_on:
+      - contacts-db
+  #base de datos de contactenos
+  contacts-db:
+    container_name: contacts-db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: contacts-db
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
+  #base de datos de recursos
+  resources-db:
+    container_name: resources-db
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: arquisoft
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: resources-db
+      MYSQL_HOST: resources-db
+  #microservicio de recursos
+  resources-ms:
+    container_name: resources-ms
+    image: yaochoal/resources-ms
+    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    volumes:
+      - ./myapp
+    depends_on:
+      - resources-db
+  #microservicio de calificaciones
+  scoreresources-ms:
+    container_name: scoreresources-ms
+    image: yaochoal/scoreresources-ms
+    depends_on:
+      - scoreresources-db
+  #base de datos de calificaciones
+  scoreresources-db:
+    container_name: scoreresources-db
+    image: mongo
+    ports:
+      - "27017:27017"
+  #microservicio de usuarios
+  users-ms:
+    container_name: users-ms
+    image: yaochoal/users-ms
+    depends_on:
+      - users-db
+  #base de datos de usuarios
+  users-db:
+    container_name: users-db
+    image: mongo
+    volumes:
+       - /data/mongodb1/db:/data/db
+    ports:
+       - 28017:28017
+  #api gateway para graphql
+  mafenix-api:
+    container_name: mafenix-api
+    image: yaochoal/mafenix-api
+    environment:
+      PORT: '5500'
+      SHOW_URLS: 'true'
+      COURSES_URL: 'resources-ms'
+      COURSES_PORT: '4000'
+      COURSES_ENTRY: 'courses'
+      TEACHERS_URL: 'resources-ms'
+      TEACHERS_PORT: '4000'
+      TEACHERS_ENTRY: 'teachers'
+      RESOURCES_URL: 'resources-ms'
+      RESOURCES_PORT: '4000'
+      RESOURCES_ENTRY: 'resources'
+      COMMENTS_URL: 'comments-ms'
+      COMMENTS_PORT: '8000'
+      COMMENTS_ENTRY: 'comments'
+      SCORERESOURCES_URL: 'scoreresources-ms'
+      SCORERESOURCES_PORT: '5000'
+      SCORERESOURCES_ENTRY: 'scoreservice'
+      CONTACTS_URL: 'contacts-ms'
+      CONTACTS_PORT: '6000'
+      CONTACTS_ENTRY: 'contacts-ms/resources/contact'
+      USERS_URL: 'users-ms'
+      USERS_PORT: '3000'
+      USERS_ENTRY: 'users'
+  #protocolo ldap
+  mafenix-ldap:
+    container_name: mafenix-ldap
+    image: osixia/openldap:1.1.8
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 200
+      PORT: '389'
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Software Architecture"
+      LDAP_DOMAIN: "mafenix"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      #LDAP_READONLY_USER_USERNAME: "readonly"
+      #LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_BACKEND: "hdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      #LDAP_REPLICATION_CONFIG_SYNCPROV: "binddn="cn=admin,cn=config" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_DB_SYNCPROV: "binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ADMIN_PASSWORD searchbase="$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    hostname: "arqsoft.org"
+  #administrador web ldap
+  mafenix-phpldapadmin:
+    container_name: mafenix-phpldapadmin
+    image: osixia/phpldapadmin:latest
+    container_name: mafenix-phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "mafenix-ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8085:80"
+    links:
+      - mafenix-ldap
+  #Proxy inverso Ngnix
+  mafenix-proxy:
+    container_name: mafenix-proxy
+    image: yaochoal/mafenix-proxy
+    ports:
+      - "80:80"
+  mafenix-wa:
+    container_name: mafenix-wa
+    image: yaochoal/mafenix-wa
+    ports:
+      - "3000:3000"
+
+  

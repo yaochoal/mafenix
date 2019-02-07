@@ -1,0 +1,32 @@
+version: '2'
+services:
+  resources-ms:
+    scale: 5
+    start_on_create: true    
+  users-ms:
+    scale: 3
+    start_on_create: true
+  comments-ms:
+    scale: 3
+    start_on_create: true
+  scoreresources-ms:
+    scale: 3
+    start_on_create: true
+  contacts-ms:
+    scale: 2
+    start_on_create: true
+  mafenix-api:
+    scale: 5
+    start_on_create: true
+  mafenix-wa:
+    scale: 5
+    start_on_create: true
+  contacts-db:
+    scale: 2
+    start_on_create: true
+  resources-db:
+    scale: 2
+    start_on_create: true
+  comments-db:
+    scale: 2
+    start_on_create: true
