@@ -1,0 +1,9 @@
+version: "2"
+services:
+  mafenix-wa:
+    build: .
+    container_name: mafenix-wa
+    image: mafenix-wa
+    ports:
+      - "3000:3000"
+

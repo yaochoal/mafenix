@@ -17,10 +17,7 @@ class ResourcesController < ApplicationController
 
   # POST /resources
   def create
-    resource = Resource.create(name: params[:name],description: params[:description], file: params[:file])
-    if params[:file] != nil
-    resource.link = url_for(resource.file)
-    end
+    resource = Resource.create(name: params[:name],description: params[:description], link: params[:link])
     if resource.save
       render json: resource, status: :created, location: resource
     else
@@ -30,11 +27,7 @@ class ResourcesController < ApplicationController
 
   # PATCH/PUT /resources/1
   def update
-    if @resource.update(name: params[:name],description: params[:description], file: params[:file])
-      if params[:file] != nil
-      @resource.link = url_for(@resource.file)
-
-      end
+    if @resource.update(name: params[:name],description: params[:description], link: params[:link])
       render json: @resource
     else
       render json: @resource.errors, status: :unprocessable_entity
@@ -54,6 +47,6 @@ class ResourcesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:resource).permit(:name, :link, :description, :file)
+      params.require(:resource).permit(:name, :link, :description)
     end
 end

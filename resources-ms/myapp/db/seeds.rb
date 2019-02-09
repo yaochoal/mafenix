@@ -835,8 +835,6 @@ Course.create([
           name: Faker::Job.title,
           link: "http://www.pdf995.com/samples/pdf.pdf",
           description: Faker::RickAndMorty.quote
-         
-         
          }])
      end
  

@@ -9,7 +9,7 @@ services:
   comments-ms:
     container_name: comments-ms
     image: yaochoal/comments-ms
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "sleep 40 && python manage.py makemigrations snippets && python manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./code
     depends_on:
@@ -30,16 +30,24 @@ services:
       MYSQL_USER: sa
       MYSQL_PASSWORD: 123
     ports:
-      - "3306:3306"
+      - "3307:3307"
   #base de datos de recursos
   resources-db:
     container_name: resources-db
-    image: postgres
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: arquisoft
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: resources-db
+      MYSQL_HOST: resources-db
   #microservicio de recursos
   resources-ms:
     container_name: resources-ms
     image: yaochoal/resources-ms
-    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    command: bash -c "sleep 40 && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 4000 -b '0.0.0.0'"
     volumes:
       - ./myapp
     depends_on:
@@ -157,5 +165,16 @@ services:
     image: yaochoal/mafenix-proxy
     ports:
       - "80:80"
+  #Aplicacion web
+  mafenix-wa:
+    container_name: mafenix-wa
+    image: yaochoal/mafenix-wa:latest
+    ports:
+      - "3000:3000"
+  mafenix-files:
+    container_name: mafenix-files
+    image: yaochoal/mafenix-files
+    ports:
+      - "8000:8000"
 
   

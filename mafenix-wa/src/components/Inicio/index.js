@@ -1,7 +1,6 @@
 // Dependencies
 import React, { Component } from 'react';
 import { logPageView } from '../../analytics';
-import firebase from 'firebase';
 import swal from 'sweetalert2';
 
 //graphql
@@ -20,12 +19,7 @@ class Inicio extends Component {
     logPageView();
   }
   componentWillMount(){
-   const nameRef = firebase.database().ref().child('titulo')
-   nameRef.on('value', snapshot => {
-    this.setState({
-    name: snapshot.val()
-   })
-  })
+   
 }
 
   cambiarEstado=(e)=>{
