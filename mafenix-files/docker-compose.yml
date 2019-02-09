@@ -1,0 +1,8 @@
+version: "2"
+services:
+  mafenix-files:
+    container_name: mafenix-files
+    image: mafenix-files
+    build: .
+    ports:
+      - "8000:8000"

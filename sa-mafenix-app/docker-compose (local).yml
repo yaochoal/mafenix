@@ -8,8 +8,8 @@ services:
   #microservicio de comentarios
   comments-ms:
     container_name: comments-ms
-    image: yaochoal/comments-ms
-    command: python3 manage.py runserver 0.0.0.0:8000
+    image: comments-ms
+    command: bash -c "sleep 40 && python manage.py makemigrations snippets && python manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./code
     depends_on:
@@ -17,7 +17,7 @@ services:
   #microservicio de contactenos
   contacts-ms:
     container_name: contacts-ms
-    image: yaochoal/contacts-ms
+    image: contacts-ms
     depends_on:
       - contacts-db
   #base de datos de contactenos
@@ -30,7 +30,7 @@ services:
       MYSQL_USER: sa
       MYSQL_PASSWORD: 123
     ports:
-      - "3306:3306"
+      - "3307:3307"
   #base de datos de recursos
   resources-db:
     container_name: resources-db
@@ -46,8 +46,8 @@ services:
   #microservicio de recursos
   resources-ms:
     container_name: resources-ms
-    image: yaochoal/resources-ms
-    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    image: resources-ms
+    command: bash -c "sleep 40 && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 4000 -b '0.0.0.0'"
     volumes:
       - ./myapp
     depends_on:
@@ -55,7 +55,7 @@ services:
   #microservicio de calificaciones
   scoreresources-ms:
     container_name: scoreresources-ms
-    image: yaochoal/scoreresources-ms
+    image: scoreresources-ms
     depends_on:
       - scoreresources-db
   #base de datos de calificaciones
@@ -67,7 +67,7 @@ services:
   #microservicio de usuarios
   users-ms:
     container_name: users-ms
-    image: yaochoal/users-ms
+    image: users-ms
     depends_on:
       - users-db
   #base de datos de usuarios
@@ -81,7 +81,7 @@ services:
   #api gateway para graphql
   mafenix-api:
     container_name: mafenix-api
-    image: yaochoal/mafenix-api
+    image: mafenix-api
     environment:
       PORT: '5500'
       SHOW_URLS: 'true'
@@ -162,12 +162,12 @@ services:
   #Proxy inverso Ngnix
   mafenix-proxy:
     container_name: mafenix-proxy
-    image: yaochoal/mafenix-proxy
+    image: mafenix-proxy
     ports:
       - "80:80"
   mafenix-wa:
     container_name: mafenix-wa
-    image: yaochoal/mafenix-wa
+    image: mafenix-wa
     ports:
       - "3000:3000"
 

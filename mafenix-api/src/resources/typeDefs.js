@@ -11,6 +11,7 @@ type Resource {
 input ResourceInput {
     name: String!
     description: String!
+    link: String!
 }
 input ResourceSearch {
     resource_name: String!
@@ -25,7 +26,6 @@ export const resourcesQueries = `
 
 
 export const resourcesMutations = `
-    uploadFile(file: Upload!): Boolean
     createResource(resource: ResourceInput!): Resource!
     deleteResource(id: Int!): Int
     updateResource(id: Int!, resource: ResourceInput!): Resource!

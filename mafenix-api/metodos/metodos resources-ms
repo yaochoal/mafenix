@@ -179,16 +179,16 @@ query{
 /////////////crear recurso///////////////////////
 mutation{
 	createResource(resource:{
-	name: "${this.state.nombre}"
-  description:"${this.state.mensaje}"
-	
+	name: "nombreeee"
+  description:"descripccciooon"
+	link: "Este es el linkasdasd"
 	}){
     id
-  name
- description
-	 created_at
+    name
+    description
+	  created_at
 	}
-	  }
+}
 
 /////////////////modificar recurso//////////////
 
@@ -196,11 +196,12 @@ mutation{
   updateResource(id:60,resource:{
     name: "Nuevo recursodasdasd"
     description:"Descirpcionasdasdasd del recurso"
-    
+    link: "Este es el linkasdasd"
   }){
     id
     name
     description
+    link
     created_at
   }
 }

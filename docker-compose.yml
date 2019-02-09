@@ -10,7 +10,7 @@ services:
     container_name: comments-ms
     image: comments-ms
     build: ./comments-ms
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "sleep 40 && python manage.py makemigrations snippets && python manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./code
     depends_on:
@@ -50,7 +50,7 @@ services:
     container_name: resources-ms
     image: resources-ms
     build: ./resources-ms
-    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    command: bash -c "sleep 40 && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 4000 -b '0.0.0.0'"
     volumes:
       - ./myapp
     ports:
@@ -177,8 +177,18 @@ services:
   #Aplicacion web
   mafenix-wa:
     container_name: mafenix-wa
-    image: yaochoal/mafenix-wa
+    image: mafenix-wa
+    build: ./mafenix-wa
     ports:
       - "3000:3000"
+  mafenix-files:
+    container_name: mafenix-files
+    image: mafenix-files
+    build: ./mafenix-files
+    ports:
+      - "8000:8000"
+
+  
+  
 
   

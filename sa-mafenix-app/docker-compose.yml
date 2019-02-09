@@ -1,0 +1,163 @@
+version: '2'
+services:
+  users-ms:
+    image: yaochoal/users-ms
+  mafenix-proxy:
+    image: yaochoal/mafenix-proxy
+    ports:
+    - 80:80/tcp
+  resources-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: resources-db
+      MYSQL_HOST: resources-db
+      MYSQL_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: '123'
+      MYSQL_USER: arquisoft
+    ports:
+    - 3306:3306/tcp
+  contacts-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: contacts-db
+      MYSQL_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: '123'
+      MYSQL_USER: sa
+    ports:
+    - 3307:3307/tcp
+  mafenix-ldap:
+    image: osixia/openldap:1.1.8
+    hostname: arqsoft.org
+    environment:
+      COMPOSE_HTTP_TIMEOUT: '200'
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_BACKEND: hdb
+      LDAP_BASE_DN: ''
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_DOMAIN: mafenix
+      LDAP_LOG_LEVEL: '256'
+      LDAP_ORGANISATION: Software Architecture
+      LDAP_READONLY_USER: 'false'
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: 'true'
+      LDAP_REPLICATION: 'false'
+      LDAP_SSL_HELPER_PREFIX: ldap
+      LDAP_TLS: 'true'
+      LDAP_TLS_CA_CRT_FILENAME: ca.crt
+      LDAP_TLS_CIPHER_SUITE: SECURE256:-VERS-SSL3.0
+      LDAP_TLS_CRT_FILENAME: ldap.crt
+      LDAP_TLS_ENFORCE: 'false'
+      LDAP_TLS_KEY_FILENAME: ldap.key
+      LDAP_TLS_PROTOCOL_MIN: '3.1'
+      LDAP_TLS_VERIFY_CLIENT: demand
+      PORT: '389'
+    stdin_open: true
+    volumes:
+    - /container/service/slapd/assets/certs/
+    - /etc/ldap/slapd.d
+    - /var/lib/ldap
+    tty: true
+    ports:
+    - 389:389/tcp
+    - 636:636/tcp
+  users-db:
+    image: mongo
+    volumes:
+    - /data/mongodb1/db:/data/db
+    ports:
+    - 28017:28017/tcp
+  resources-ms:
+    image: yaochoal/resources-ms
+    volumes:
+    - /myapp
+    command:
+    - bash
+    - -c
+    - sleep 40 && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 4000 -b '0.0.0.0'
+    labels:
+      io.rancher.container.pull_image: always
+  scoreresources-db:
+    image: mongo
+    ports:
+    - 27017:27017/tcp
+  mafenix-api:
+    image: yaochoal/mafenix-api
+    environment:
+      COMMENTS_ENTRY: comments
+      COMMENTS_PORT: '8000'
+      COMMENTS_URL: comments-ms
+      CONTACTS_ENTRY: contacts-ms/resources/contact
+      CONTACTS_PORT: '6000'
+      CONTACTS_URL: contacts-ms
+      COURSES_ENTRY: courses
+      COURSES_PORT: '4000'
+      COURSES_URL: resources-ms
+      PORT: '5500'
+      RESOURCES_ENTRY: resources
+      RESOURCES_PORT: '4000'
+      RESOURCES_URL: resources-ms
+      SCORERESOURCES_ENTRY: scoreservice
+      SCORERESOURCES_PORT: '5000'
+      SCORERESOURCES_URL: scoreresources-ms
+      SHOW_URLS: 'true'
+      TEACHERS_ENTRY: teachers
+      TEACHERS_PORT: '4000'
+      TEACHERS_URL: resources-ms
+      USERS_ENTRY: users
+      USERS_PORT: '3000'
+      USERS_URL: users-ms
+    labels:
+      io.rancher.container.pull_image: always
+  mafenix-phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    environment:
+      PHPLDAPADMIN_HTTPS: 'false'
+      PHPLDAPADMIN_LDAP_HOSTS: mafenix-ldap
+    links:
+    - mafenix-ldap:mafenix-ldap
+    ports:
+    - 8085:80/tcp
+  mafenix-files:
+    image: yaochoal/mafenix-files
+    stdin_open: true
+    tty: true
+    ports:
+    - 8000:8000/tcp
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label: server=node1
+  comments-ms:
+    image: yaochoal/comments-ms
+    volumes:
+    - /code
+    command:
+    - bash
+    - -c
+    - sleep 40 && python manage.py makemigrations snippets && python manage.py migrate && python3 manage.py runserver 0.0.0.0:8000
+  mafenix-api-lb:
+    image: rancher/lb-service-haproxy:v0.9.6
+    ports:
+    - 5500:5500/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: server=node1
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'
+  mafenix-wa-lb:
+    image: rancher/lb-service-haproxy:v0.9.6
+    ports:
+    - 3000:3000/tcp
+    labels:
+      io.rancher.scheduler.affinity:host_label: server=node1
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'
+  scoreresources-ms:
+    image: yaochoal/scoreresources-ms
+  mafenix-wa:
+    image: yaochoal/mafenix-wa
+    labels:
+      io.rancher.container.pull_image: always
+  comments-db:
+    image: postgres
+  contacts-ms:
+    image: yaochoal/contacts-ms

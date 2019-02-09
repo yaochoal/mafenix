@@ -1,0 +1,91 @@
+version: '2'
+services:
+  users-ms:
+    scale: 2
+    start_on_create: true
+  mafenix-proxy:
+    scale: 1
+    start_on_create: true
+  resources-db:
+    scale: 1
+    start_on_create: true
+  contacts-db:
+    scale: 1
+    start_on_create: true
+  mafenix-ldap:
+    scale: 1
+    start_on_create: true
+  users-db:
+    scale: 1
+    start_on_create: true
+  resources-ms:
+    scale: 5
+    start_on_create: true
+  scoreresources-db:
+    scale: 1
+    start_on_create: true
+  mafenix-api:
+    scale: 5
+    start_on_create: true
+  mafenix-phpldapadmin:
+    scale: 1
+    start_on_create: true
+  mafenix-files:
+    scale: 1
+    start_on_create: true
+  comments-ms:
+    scale: 3
+    start_on_create: true
+  mafenix-api-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - hostname: ''
+        path: ''
+        priority: 1
+        protocol: http
+        service: mafenix-api
+        source_port: 5500
+        target_port: 5500
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 42
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      reinitializing_timeout: 60000
+  mafenix-wa-lb:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - path: ''
+        priority: 1
+        protocol: http
+        service: mafenix-wa
+        source_port: 3000
+        target_port: 3000
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      reinitializing_timeout: 60000
+  scoreresources-ms:
+    scale: 3
+    start_on_create: true
+  mafenix-wa:
+    scale: 5
+    start_on_create: true
+  comments-db:
+    scale: 1
+    start_on_create: true
+  contacts-ms:
+    scale: 2
+    start_on_create: true

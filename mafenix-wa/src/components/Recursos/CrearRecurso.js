@@ -3,27 +3,16 @@ import Title from '../Global/Title';
 import swal from 'sweetalert2'
 import { logPageView } from '../../analytics';
 import baseURL from "../../url";
+import baseURLfiles from "../../urlfiles";
 import axios from 'axios';
-//import { Mutation } from 'react-apollo';
-//import Dropzone from 'react-dropzone';
+import ApolloClient from 'apollo-boost';
+import gql from "graphql-tag";
 
-//import gql from "graphql-tag";
-//import { createUploadLink } from 'apollo-upload-client';
-//import { ApolloClient } from 'apollo-client';
-//import { InMemoryCache } from 'apollo-cache-inmemory';
-/*
-const link = createUploadLink({ uri: 'http://192.168.99.101:5500/graphql' });
 const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache(),
+  uri: `${baseURL}`
 });
-
-const uploadFileMutation = gql`
-  mutation($file: Upload!) {
-    uploadFile(file: $file)
-  }
-`;
-*/
+const endpoint = `${baseURLfiles}/upload`
+const endpoint1 = `${baseURLfiles}/public/files/`
 class Contenido extends Component {
  constructor(props){
 				super(props);
@@ -34,14 +23,93 @@ class Contenido extends Component {
 						datos: null,
 						mensaje : '',
 						mensajeErr: '',
-						file: []
+						selectedFile: null,
+            loaded: 0,
 				}
 				this.handleInput =this.handleInput.bind(this);
 				this.validar = this.validar.bind(this);
 				this.onSubmit = this.onSubmit.bind(this);
 				logPageView();
 		}
+    handleselectedFile = event => {
+			this.setState({
+				selectedFile: event.target.files[0],
+				loaded: 0,
+			})
+		}
+		handleUpload = () => {
+			if((this.state.nombreErr !=="" || this.state.nombre === '' || this.state.file=== null || this.state.mensaje === '')  ){
+				swal("Llene los campos señalados",'','error'); 
+		 }else{
+			 
+				 client.mutate({
+					 mutation: gql`
+					 mutation{
+						 createResource(resource:{
+							 name: "${this.state.nombre}"
+							 description:"${this.state.mensaje}"
+							 link: "este es el nuevo link"
+						 }){
+							 id
+							 name
+							 description
+						 }
+						 }
+					 `
+					 })
+					 .then(data => {
+					 console.log(data.data.createResource.id)
+					 const datafile = new FormData()
+					datafile.append('file', this.state.selectedFile, "resource"+data.data.createResource.id+".pdf")
+					console.log("resource"+data.data.createResource.id+".pdf")
+					axios
+						.post(endpoint, datafile, {
+							onUploadProgress: ProgressEvent => {
+								this.setState({
+									loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100,
+								})
+							},
+						})
+						.then(res => {
+							console.log(res.statusText)
+						})
 
+						client.mutate({
+							mutation: gql`
+							mutation{
+								updateResource(id:${data.data.createResource.id},resource:{
+									name: "${data.data.createResource.name}"
+									description:"${data.data.createResource.description}"
+									link: "${endpoint1}resource${data.data.createResource.id}.pdf"
+								}){
+									id
+									name
+									description
+									link
+									created_at
+								}
+							}
+							`
+							})
+							.then(data => {
+								console.log("oks");
+							})
+							.catch(error => console.error(error));
+
+					 swal("Su recurso ha sido creado",'','success');
+					 //setTimeout(function () {window.location.replace(`recursos/${data.data.createResource.id}`)},2000);
+					 })
+					 .catch(error => console.error(error));
+		 }
+		 
+		 this.setState( {
+				 nombre : '',
+				 nombreErr :'',
+				 mensaje : '',
+				 mensajeErr: ''
+		 });  
+		 
+		}
 		handleInput(e){
 				this.setState({
 						[e.target.name]:e.target.value
@@ -56,67 +124,12 @@ class Contenido extends Component {
 						this.setState({nombreErr: ''});
 				}
 		}
-		onChange=(e)=>{
-			let files = e.target.files
-			//console.warn("datafile",files[0])
-			this.setState({
-				file:files[0]
-		});
-		}
+	
 		onSubmit(e){
 
 //        console.log(this.state);
 				e.preventDefault();
-				if((this.state.nombreErr !=="" || this.state.nombre === '' || this.state.file=== null || this.state.mensaje === '')  ){
-					 swal("Llene los campos señalados",'','error'); 
-				}else{
-					//console.log(this.state.file);
-					/*
-						client.mutate({
-							mutation: gql`
-							mutation{
-								createResource(resource:{
-								  name: "${this.state.nombre}"
-								  description:"${this.state.mensaje}"
-								  
-								}){
-								  id
-								}
-							  }
-							`
-						  })
-						  .then(data => {
-							console.log(data.data.createResource.id)
-							swal("Su recurso ha sido creado",'','success');
-						  })
-						  .catch(error => console.error(error));
-						  */
-						 var bodyFormData = new FormData();
-						 bodyFormData.set('name', `${this.state.nombre}`);
-						 bodyFormData.set('description', `${this.state.mensaje}`);
-						 bodyFormData.append('file', this.state.file); 
-						  axios({
-							method: 'post',
-							url: `http://192.168.99.101:4000/resources`,
-							data: bodyFormData,
-							config: { headers: {'Content-Type': 'multipart/form-data' }}
-							})
-							.then(function (response) {
-								//handle success
-								console.log(response);
-							})
-							.catch(function (response) {
-								//handle error
-								console.log(response);
-							});
-						  
-				}
-				this.setState( {
-						nombre : '',
-						nombreErr :'',
-						mensaje : '',
-						mensajeErr: ''
-				});  
+				
 			 };
 	render(){
 		return(<div>
@@ -140,19 +153,18 @@ class Contenido extends Component {
 												</div>
 												 <div className="form-group">
 														<label >Archivo del recurso: </label>
-												<input type="file" name ="file" onChange={this.onChange}/>
+														<input type="file" name="" id="" onChange={this.handleselectedFile} />
 												
 										 </div>
 										</div>
 										<div className="col-sm-12 text-center">
-												<button type="submit" className="btn btn-primary" onClick ={this.onSubmit}><i className="fa fa-envelope-o"  ></i> Crear recurso</button>
-			{/*																			<Mutation mutation={uploadFileMutation}>
-    {mutate => (
-      <Dropzone onDrop={([file]) => mutate({ variables: { file } })}>
-        <p>Try dropping some files here, or click to select files to upload.</p>
-      </Dropzone>
-    )}
-	</Mutation>*/}
+										<div> {Math.round(this.state.loaded, 2)} %</div>
+												<button type="submit" className="btn btn-primary" onClick ={this.handleUpload}><i className="fa fa-envelope-o"  ></i> Crear recurso</button>
+												<div className="App">
+        
+        
+        
+      </div>
 
 										</div> 
 

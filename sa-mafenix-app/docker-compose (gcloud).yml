@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 #todos los microservicios
 services:
   #base de datos de comentarios
@@ -8,22 +8,16 @@ services:
   #microservicio de comentarios
   comments-ms:
     container_name: comments-ms
-    image: comments-ms
-    build: ./comments-ms
+    image: yaochoal/comments-ms
     command: bash -c "sleep 40 && python manage.py makemigrations snippets && python manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./code
-    ports:
-      - "8000:8000"
     depends_on:
       - comments-db
   #microservicio de contactenos
   contacts-ms:
     container_name: contacts-ms
-    image: contacts-ms
-    build: ./contacts-ms
-    ports:
-      - "6000:6000"
+    image: yaochoal/contacts-ms
     depends_on:
       - contacts-db
   #base de datos de contactenos
@@ -52,22 +46,16 @@ services:
   #microservicio de recursos
   resources-ms:
     container_name: resources-ms
-    image: resources-ms
-    build: ./resources-ms
+    image: yaochoal/resources-ms
     command: bash -c "sleep 40 && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 4000 -b '0.0.0.0'"
     volumes:
       - ./myapp
-    ports:
-      - "4000:4000"
     depends_on:
       - resources-db
   #microservicio de calificaciones
   scoreresources-ms:
     container_name: scoreresources-ms
-    image: scoreresources-ms
-    build: ./scoreresources-ms
-    ports:
-      - "5000:5000"
+    image: yaochoal/scoreresources-ms
     depends_on:
       - scoreresources-db
   #base de datos de calificaciones
@@ -79,10 +67,7 @@ services:
   #microservicio de usuarios
   users-ms:
     container_name: users-ms
-    image: users-ms
-    build: ./users-ms/users-restapi
-    ports: 
-      - 3000:3000
+    image: yaochoal/users-ms
     depends_on:
       - users-db
   #base de datos de usuarios
@@ -96,8 +81,7 @@ services:
   #api gateway para graphql
   mafenix-api:
     container_name: mafenix-api
-    image: mafenix-api
-    build: ./mafenix-api
+    image: yaochoal/mafenix-api
     environment:
       PORT: '5500'
       SHOW_URLS: 'true'
@@ -122,8 +106,6 @@ services:
       USERS_URL: 'users-ms'
       USERS_PORT: '3000'
       USERS_ENTRY: 'users'
-    ports:
-      - '5500:5500'
   #protocolo ldap
   mafenix-ldap:
     container_name: mafenix-ldap
@@ -180,16 +162,10 @@ services:
   #Proxy inverso Ngnix
   mafenix-proxy:
     container_name: mafenix-proxy
-    image: mafenix-proxy
-    build: ./mafenix-proxy
+    image: yaochoal/mafenix-proxy
     ports:
       - "80:80"
-  #Aplicacion web
   mafenix-wa:
     container_name: mafenix-wa
-    image: mafenix-wa
-    build: ./mafenix-wa
-    ports:
-      - "3000:3000"
-
+    image: yaochoal/mafenix-wa
   
