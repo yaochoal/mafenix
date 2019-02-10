@@ -1,0 +1,59 @@
+
+///configuracion archivo bd 1
+[mysqld]
+server_id           = 1
+log_bin             = /var/log/mysql/mysql-bin.log
+log_bin_index       = /var/log/mysql/mysql-bin.log.index
+relay_log           = /var/log/mysql/mysql-relay-bin
+relay_log_index     = /var/log/mysql/mysql-relay-bin.index
+expire_logs_days    = 10
+max_binlog_size     = 100M
+log_slave_updates   = 1
+bind-address        = 10.42.201.101 
+auto-increment-increment = 1
+auto-increment-offset = 1
+
+///configuracion archivo bd 2
+[mysqld]
+server_id           = 2
+log_bin             = /var/log/mysql/mysql-bin.log
+log_bin_index       = /var/log/mysql/mysql-bin.log.index
+relay_log           = /var/log/mysql/mysql-relay-bin
+relay_log_index     = /var/log/mysql/mysql-relay-bin.index
+expire_logs_days    = 10
+max_binlog_size     = 100M
+log_slave_updates   = 1
+bind-address        = 10.42.27.212 
+auto-increment-increment = 1
+auto-increment-offset = 1
+
+///acceso a mysql
+mysql -u root -p
+
+configuracion de permisos en bd1///////////////////////
+GRANT REPLICATION SLAVE ON *.* TO 'replication'@'10.42.27.212' IDENTIFIED BY '123';
+
+///comprobar conexion///
+mysql -u replication -p -h 10.42.27.212 -P 3306
+///ver posicion y archivo de replicacion///
+show master status;
+
+
+configuracion de permisos en bd2///////////////////////
+GRANT REPLICATION SLAVE ON *.* TO 'replication'@' 10.42.201.101' IDENTIFIED BY '123';
+///comprobar conexion///
+mysql -u replication -p -h 10.42.201.101 -P 3306
+///ver posicion y archivo de replicacion///
+show master status;
+
+
+asignacion de maestro a bd2////////////////////////// 
+stop slave;
+CHANGE MASTER TO master_host='10.42.201.101', master_port=3306, master_user='replication', master_password='123', master_log_file='mysql-bin.000002', master_log_pos=452;
+start slave;
+
+
+asignacion de maestro a bd1////////////////////////// 
+stop slave;
+CHANGE MASTER TO master_host='10.42.27.212', master_port=3306, master_user='replication', master_password='123', master_log_file='mysql-bin.000002', master_log_pos=453;
+start slave;
